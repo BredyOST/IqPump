@@ -1,0 +1,400 @@
+@use 'sass:math';
+@use './variable/global';
+
+@mixin translateX($value) {
+    transform: translateX($value);
+}
+
+// Подключение шрифта
+@mixin font($font_name, $file_name, $weight, $style) {
+    @font-face {
+        font-family: $font_name;
+        font-display: swap;
+        src:
+            url('../fonts/#{$file_name}.woff2') format('woff2'),
+            url('../fonts/#{$file_name}.woff') format('woff');
+        font-weight: #{$weight};
+        font-style: #{$style};
+    }
+}
+
+// Percent
+@function percent($px, $from) {
+    $result: math.div($px, $from) * 100%;
+    @return $result;
+}
+
+// mixins.rem
+@function rem($px) {
+    $result: math.div($px, 16) + rem;
+    @return $result;
+}
+
+// EM
+@function em($px, $current: 16) {
+    $result: math.div($px, $current) + em;
+    @return $result;
+}
+
+// Currency
+@mixin currency($sym) {
+    &::after {
+        content: '#{$sym}';
+    }
+}
+
+// Grids
+@mixin gridCards($type: fit, $min: 280px, $max: 1fr, $gap: 30px) {
+    display: grid;
+    gap: $gap;
+    grid-template-columns: repeat(auto-#{$type}, minmax($min, $max));
+}
+
+// Адаптивное свойство (clamp)
+@mixin adaptiveValue($property, $startSize, $minSize, $keepSize: 0, $widthFrom: global.$containerWidth, $widthTo: global.$minWidth) {
+    @if $startSize == 0 {
+        $startSize: 0.000001;
+    }
+
+    @if $minSize == 0 {
+        $minSize: 0.000001;
+    }
+
+    // Для calc();
+    $addSize: math.div($startSize - $minSize, 16);
+
+    // $addSize: calc(($startSize - $minSize) / 16);
+
+    @if $widthFrom == global.$containerWidth and global.$maxWidthContainer == 0 {
+        $widthFrom: global.$maxWidth;
+    }
+
+    // Брейк-поинты в EM
+    $widthFromMedia: em($widthFrom);
+    $widthToMedia: em($widthTo);
+
+    // Формула плавающего значения
+    // Источник: https://css-tricks.com/linearly-scale-font-size-with-css-clamp-based-on-the-viewport/
+    $slope: math.div(($startSize - $minSize), ($widthFrom - $widthTo));
+
+    // $slope: calc(($startSize - $minSize) / ($widthFrom - $widthTo));
+    $yIntersection: -$widthTo * $slope + $minSize;
+
+    @if $yIntersection == 0 {
+        $yIntersection: 0.000001;
+    }
+
+    $flyValue: #{rem($yIntersection)}' + ' #{$slope * 100}vw;
+
+    // Получение значения свойства
+    $propertyValue: #{'clamp(' rem($minSize) ',' $flyValue ',' rem($startSize) ')'};
+
+    // Если отрицательные значения
+    @if $minSize > $startSize {
+        $propertyValue: #{'clamp(' rem($startSize) ',' $flyValue ',' rem($minSize) ')'};
+    }
+
+    // Устанавливаем значения по умолчанию
+    @if $keepSize != 1 and $keepSize != 3 {
+        @media (min-width: $widthFromMedia) {
+            #{$property}: rem($startSize);
+        }
+    }
+
+    // Адаптируем размер в промежутке между указанными ширинами вьюпорта
+    @media (min-width: $widthToMedia) and (max-width: $widthFromMedia) {
+        // Если поддерживается clamp();
+        @supports (#{$property}: $propertyValue) {
+            #{$property}: $propertyValue;
+        }
+
+        // Если не поддерживается clamp();
+        @supports not (#{$property}: $propertyValue) {
+            #{$property}: calc(
+                #{rem($minSize)} + #{$addSize} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)}
+            );
+        }
+    }
+
+    @if $keepSize != 1 and $keepSize != 2 {
+        @media (max-width: $widthToMedia) {
+            #{$property}: rem($minSize);
+        }
+    }
+}
+
+@mixin media($from: null, $to: null) {
+    @if $from != null and $to != null {
+        @media (min-width: em($from)) and (max-width: em($to)) {
+            @content;
+        }
+    } @else if $from != null {
+        @media (min-width: em($from)) {
+            @content;
+        }
+    } @else if $to != null {
+        @media (max-width: em($to)) {
+            @content;
+        }
+    }
+}
+
+@mixin adaptiveValueTransform(
+    $property,
+    $startSize,
+    $minSize,
+    $keepSize: 0,
+    $widthFrom: global.$containerWidth,
+    $widthTo: global.$minWidth,
+    $axis: 'x'
+) {
+    @if $startSize == 0 {
+        $startSize: 0.000001;
+    }
+
+    @if $minSize == 0 {
+        $minSize: 0.000001;
+    }
+
+    $addSize: math.div($startSize - $minSize, 16);
+
+    @if $widthFrom == global.$containerWidth and global.$maxWidthContainer == 0 {
+        $widthFrom: global.$maxWidth;
+    }
+
+    $widthFromMedia: em($widthFrom);
+    $widthToMedia: em($widthTo);
+
+    $slope: math.div(($startSize - $minSize), ($widthFrom - $widthTo));
+    $yIntersection: -$widthTo * $slope + $minSize;
+
+    @if $yIntersection == 0 {
+        $yIntersection: 0.000001;
+    }
+
+    $flyValue: #{rem($yIntersection)}' + ' #{$slope * 100}vw;
+
+    $propertyValue: #{'clamp(' rem($minSize) ',' $flyValue ',' rem($startSize) ')'};
+
+    @if $minSize > $startSize {
+        $propertyValue: #{'clamp(' rem($startSize) ',' $flyValue ',' rem($minSize) ')'};
+    }
+
+    // Если свойство - transform, добавляем translate в зависимости от оси
+    @if $property == 'transform' {
+        @if $axis == 'x' {
+            $propertyValue: translateX(#{$propertyValue});
+        } @else if $axis == 'y' {
+            $propertyValue: translateY(#{$propertyValue});
+        } @else if $axis == 'both' {
+            $propertyValue: translate(#{$propertyValue}, #{$propertyValue});
+        }
+    }
+
+    @if $keepSize != 1 and $keepSize != 3 {
+        @media (min-width: $widthFromMedia) {
+            #{$property}: if($property == 'transform', translate(rem($startSize), rem($startSize)), rem($startSize));
+        }
+    }
+
+    @media (min-width: $widthToMedia) and (max-width: $widthFromMedia) {
+        @supports (#{$property}: $propertyValue) {
+            #{$property}: $propertyValue;
+        }
+
+        @supports not (#{$property}: $propertyValue) {
+            #{$property}: if(
+                $property == 'transform',
+                translate(
+                    calc(
+                        #{rem($minSize)} + #{$addSize} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)}
+                    ),
+                    calc(#{rem($minSize)} + #{$addSize} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)})
+                ),
+                calc(#{rem($minSize)} + #{$addSize} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)})
+            );
+        }
+    }
+
+    @if $keepSize != 1 and $keepSize != 2 {
+        @media (max-width: $widthToMedia) {
+            #{$property}: if($property == 'transform', translate(rem($minSize), rem($minSize)), rem($minSize));
+        }
+    }
+}
+@mixin adaptiveValueTransformAll(
+    $property,
+    $startSizeX,
+    $minSizeX,
+    $startSizeY,
+    $minSizeY,
+    $keepSize: 0,
+    $widthFrom: global.$containerWidth,
+    $widthTo: global.$minWidth
+) {
+    @if $startSizeX == 0 {
+        $startSizeX: 0.000001;
+    }
+
+    @if $minSizeX == 0 {
+        $minSizeX: 0.000001;
+    }
+
+    @if $startSizeY == 0 {
+        $startSizeY: 0.000001;
+    }
+
+    @if $minSizeY == 0 {
+        $minSizeY: 0.000001;
+    }
+
+    $addSizeX: math.div($startSizeX - $minSizeX, 16);
+    $addSizeY: math.div($startSizeY - $minSizeY, 16);
+
+    @if $widthFrom == global.$containerWidth and global.$maxWidthContainer == 0 {
+        $widthFrom: global.$maxWidth;
+    }
+
+    $widthFromMedia: em($widthFrom);
+    $widthToMedia: em($widthTo);
+
+    $slopeX: math.div(($startSizeX - $minSizeX), ($widthFrom - $widthTo));
+    $slopeY: math.div(($startSizeY - $minSizeY), ($widthFrom - $widthTo));
+
+    $yIntersectionX: -$widthTo * $slopeX + $minSizeX;
+    $yIntersectionY: -$widthTo * $slopeY + $minSizeY;
+
+    @if $yIntersectionX == 0 {
+        $yIntersectionX: 0.000001;
+    }
+
+    @if $yIntersectionY == 0 {
+        $yIntersectionY: 0.000001;
+    }
+
+    $flyValueX: #{rem($yIntersectionX)}' + ' #{$slopeX * 100}vw;
+    $flyValueY: #{rem($yIntersectionY)}' + ' #{$slopeY * 100}vw;
+
+    $propertyValueX: #{'clamp(' rem($minSizeX) ',' $flyValueX ',' rem($startSizeX) ')'};
+    $propertyValueY: #{'clamp(' rem($minSizeY) ',' $flyValueY ',' rem($startSizeY) ')'};
+
+    @if $minSizeX > $startSizeX {
+        $propertyValueX: #{'clamp(' rem($startSizeX) ',' $flyValueX ',' rem($minSizeX) ')'};
+    }
+
+    @if $minSizeY > $startSizeY {
+        $propertyValueY: #{'clamp(' rem($startSizeY) ',' $flyValueY ',' rem($minSizeY) ')'};
+    }
+
+    $propertyValue: translate(#{$propertyValueX}, #{$propertyValueY});
+
+    @if $keepSize != 1 and $keepSize != 3 {
+        @media (min-width: $widthFromMedia) {
+            #{$property}: translate(rem($startSizeX), rem($startSizeY));
+        }
+    }
+
+    @media (min-width: $widthToMedia) and (max-width: $widthFromMedia) {
+        @supports (#{$property}: $propertyValue) {
+            #{$property}: $propertyValue;
+        }
+
+        @supports not (#{$property}: $propertyValue) {
+            #{$property}: translate(
+                calc(#{rem($minSizeX)} + #{$addSizeX} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)}),
+                calc(#{rem($minSizeY)} + #{$addSizeY} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)})
+            );
+        }
+    }
+
+    @if $keepSize != 1 and $keepSize != 2 {
+        @media (max-width: $widthToMedia) {
+            #{$property}: translate(rem($minSizeX), rem($minSizeY));
+        }
+    }
+}
+@mixin adaptiveValueTransformSeparate(
+    $property,
+    $startSizeX,
+    $minSizeX,
+    $startSizeY,
+    $minSizeY,
+    $keepSize: 0,
+    $widthFrom: global.$containerWidth,
+    $widthTo: global.$minWidth
+) {
+    // Проверка на нулевые значения
+    @if $startSizeX == 0 {
+        $startSizeX: 0.000001;
+    }
+    @if $minSizeX == 0 {
+        $minSizeX: 0.000001;
+    }
+    @if $startSizeY == 0 {
+        $startSizeY: 0.000001;
+    }
+    @if $minSizeY == 0 {
+        $minSizeY: 0.000001;
+    }
+
+    // Вычисление коэффициентов для оси X
+    $addSizeX: math.div($startSizeX - $minSizeX, 16);
+    $slopeX: math.div(($startSizeX - $minSizeX), ($widthFrom - $widthTo));
+    $yIntersectionX: -$widthTo * $slopeX + $minSizeX;
+
+    @if $yIntersectionX == 0 {
+        $yIntersectionX: 0.000001;
+    }
+
+    $flyValueX: #{rem($yIntersectionX)}' + ' #{$slopeX * 100}vw;
+    $propertyValueX: #{'clamp(' rem($minSizeX) ',' $flyValueX ',' rem($startSizeX) ')'};
+
+    @if $minSizeX > $startSizeX {
+        $propertyValueX: #{'clamp(' rem($startSizeX) ',' $flyValueX ',' rem($minSizeX) ')'};
+    }
+
+    // Вычисление коэффициентов для оси Y
+    $addSizeY: math.div($startSizeY - $minSizeY, 16);
+    $slopeY: math.div(($startSizeY - $minSizeY), ($widthFrom - $widthTo));
+    $yIntersectionY: -$widthTo * $slopeY + $minSizeY;
+
+    @if $yIntersectionY == 0 {
+        $yIntersectionY: 0.000001;
+    }
+
+    $flyValueY: #{rem($yIntersectionY)}' + ' #{$slopeY * 100}vw;
+    $propertyValueY: #{'clamp(' rem($minSizeY) ',' $flyValueY ',' rem($startSizeY) ')'};
+
+    @if $minSizeY > $startSizeY {
+        $propertyValueY: #{'clamp(' rem($startSizeY) ',' $flyValueY ',' rem($minSizeY) ')'};
+    }
+
+    // Общее значение для transform
+    $propertyValue: translate(#{$propertyValueX}, #{$propertyValueY});
+
+    // Медиа-запросы
+    @if $keepSize != 1 and $keepSize != 3 {
+        @media (min-width: em($widthFrom)) {
+            #{$property}: translate(rem($startSizeX), rem($startSizeY));
+        }
+    }
+
+    @media (min-width: em($widthTo)) and (max-width: em($widthFrom)) {
+        @supports (#{$property}: $propertyValue) {
+            #{$property}: $propertyValue;
+        }
+
+        @supports not (#{$property}: $propertyValue) {
+            #{$property}: translate(
+                calc(#{rem($minSizeX)} + #{$addSizeX} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)}),
+                calc(#{rem($minSizeY)} + #{$addSizeY} * (100vw - #{rem($widthTo)}) / #{math.div($widthFrom, 16) - math.div($widthTo, 16)})
+            );
+        }
+    }
+
+    @if $keepSize != 1 and $keepSize != 2 {
+        @media (max-width: em($widthTo)) {
+            #{$property}: translate(rem($minSizeX), rem($minSizeY));
+        }
+    }
+}

@@ -1,0 +1,76 @@
+@use '../../shared/styles/variable/globalIndex';
+@use '../../shared/styles/variable/global';
+@use '../../shared/styles/mixins';
+@use './../../shared/styles/variable/common';
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    background: #2f164b;
+    max-width: mixins.rem(354);
+    border-radius: mixins.rem(15);
+    align-items: center;
+    padding-top: mixins.rem(40);
+    padding-bottom: mixins.rem(40);
+    padding-left: mixins.rem(30);
+    padding-right: mixins.rem(30);
+    row-gap: mixins.rem(30);
+    max-height: mixins.rem(301);
+}
+
+.title_cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    font-family: 'Lato';
+    font-weight: 600;
+    font-size: mixins.rem(16);
+    text-align: center;
+    row-gap: mixins.rem(20);
+}
+
+.svg_brain {
+    width: mixins.rem(85);
+    height: mixins.rem(100);
+    border-radius: 50%;
+    box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) mixins.rem(10) #2f164b;
+}
+
+.title {
+    font-family: 'Luckiest Guy';
+    font-weight: 700;
+    color: #91fca5;
+}
+
+.btn_send {
+    background-color: #39e476;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
+    transition:
+        background-color ease 0.3s,
+        box-shadow ease 0.3s;
+
+    padding-left: mixins.rem(10);
+    padding-right: mixins.rem(10);
+    padding-top: mixins.rem(5);
+    padding-bottom: mixins.rem(5);
+    font-size: mixins.rem(16);
+    font-weight: 700;
+    font-family: globalIndex.$font_family_btn_first;
+    border-radius: mixins.rem(40);
+    min-height: mixins.rem(54);
+    min-width: mixins.rem(137);
+
+    @media (any-hover: hover) {
+        &:hover {
+            background-color: darken(globalIndex.$btn_background_hover, 10%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition:
+                background-color ease 0.3s,
+                box-shadow ease 0.3s;
+        }
+    }
+}

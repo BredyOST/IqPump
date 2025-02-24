@@ -1,0 +1,97 @@
+@use 'variable/globalIndex';
+@use './mixins';
+
+html {
+    box-sizing: border-box;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+:focus,
+:active {
+    outline: none;
+}
+
+a:focus,
+a:active {
+    outline: none;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+body {
+    color: globalIndex.$theme_main_text_color;
+    line-height: 1;
+    font-family: globalIndex.$font_family_main;
+    font-size: mixins.rem(globalIndex.$font_size_main);
+    font-weight: globalIndex.$font_weight_main;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    //background: rgb(220,217,249);
+    margin: 0;
+    font-family:
+        -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;
+}
+
+input,
+button,
+textarea {
+    font-family: globalIndex.$font_family_main;
+    font-size: inherit;
+}
+
+button {
+    cursor: pointer;
+    color: inherit;
+    background-color: inherit;
+}
+
+li {
+    list-style: none;
+}
+
+img {
+    vertical-align: top;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: inherit;
+    font-size: inherit;
+    font-family: globalIndex.$font_family_title;
+}
+
+p {
+    margin: 0;
+}

@@ -1,0 +1,122 @@
+@use 'sass:math';
+@use './../styles/mixins';
+@use './../styles/variable/global';
+@use './../styles/variable/globalIndex';
+@use './../styles/variable/common';
+@import './../styles/reset';
+@import './../styles/variable/fonts';
+
+body {
+    // Скролл заблокирован
+
+    .lock & {
+        overflow: hidden;
+        touch-action: none;
+        overscroll-behavior: none;
+    }
+
+    // Сайт загружен
+    .loaded & {
+    }
+}
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-bottom: mixins.rem(100);
+    background: linear-gradient(130deg, #f7e4e3 0%, #fcf9e2 38%, #ffecec 75%, #f6e0ff 100%);
+    z-index: 0;
+
+    @supports (overflow: clip) {
+        overflow: clip;
+    }
+
+    // Прижимаем footer
+    > main {
+        flex: 1 1 auto;
+    }
+
+    // Фикс для слайдеров
+    > * {
+        min-width: 0;
+    }
+}
+
+// Ограничивающий контейнер ======================================================================================================================================================================================================================
+
+/*
+(i) Стили будут применяться ко
+всем классам содержащим *__container
+*/
+@if global.$responsiveType == 1 {
+    // Отзывчивая
+    [class*='__container'] {
+        @if global.$maxWidthContainer > 0 {
+            max-width: mixins.rem(global.$containerWidth);
+            margin: 0 auto;
+        }
+
+        @if global.$containerPadding > 0 {
+            @if global.$maxWidthContainer > 0 {
+                padding: 0 mixins.rem(math.div(global.$containerPadding, 2));
+            } @else {
+                @include mixins.adaptiveValue('padding-left', math.div(global.$containerPadding, 2), 15);
+                @include mixins.adaptiveValue('padding-right', math.div(global.$containerPadding, 2), 15);
+            }
+        }
+    }
+} @else {
+    // По брейк-поинтам
+    [class*='__container'] {
+        margin: 0 auto;
+
+        @if global.$maxWidthContainer > 0 {
+            max-width: mixins.rem(global.$containerWidth);
+        } @else {
+            @if global.$containerPadding > 0 {
+                padding: 0 mixins.rem(math.div(global.$containerPadding, 2));
+            }
+        }
+
+        @media (max-width: global.$pc) {
+            max-width: mixins.rem(970);
+        }
+
+        @media (max-width: mixins.em(global.$tablet)) {
+            max-width: mixins.rem(750);
+        }
+
+        @media (max-width: mixins.em(global.$mobile)) {
+            max-width: none;
+
+            @if global.$containerPadding > 0 and global.$maxWidthContainer > 0 {
+                padding: 0 mixins.rem(math.div(global.$containerPadding, 2));
+            }
+        }
+    }
+}
+
+// дополнительный большой контейнер
+[class*='__container-big'] {
+    max-width: mixins.rem(global.$secondMaxWidthContainer);
+    margin: 0 auto;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+textarea {
+    appearance: none;
+}
+
+// input[type="checkbox"] {
+//  clip: rect(0 0 0 0);
+//  clip-path: inset(50%);
+//  height: 1px;
+//  overflow: hidden;
+//  position: absolute;
+//  white-space: nowrap;
+//  width: 1px;
+//}
