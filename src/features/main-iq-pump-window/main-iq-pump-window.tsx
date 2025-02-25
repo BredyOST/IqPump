@@ -209,6 +209,35 @@ const MainIqPumpWindow = () => {
     return (
         <div className={cls.overlay}>
             <div className={cls.cover}>
+                <div className={cls.notification_actions_btn}>
+                    <CustomSelect
+                        options={LANGUAGES}
+                        classNameWrapper={cls.select_wrap}
+                        classNameChosenValue={cls.select_chosen_value}
+                        classNameOption={cls.select_option}
+                        classNameShowed={cls.select_show_list}
+                        chosenValue={i18next.language}
+                        classNameBodyList={cls.selet_list}
+                        classNameTextWithImage={cls.select_text}
+                        onSelect={changeLanguage}
+                        classNameIcon={cls.icon}
+                        handleOpenMenu={openMenu}
+                        isOpenMenu={showSelectMenu}
+                        classNameBlockList={cls.bllock_list}
+                    />
+                    <div className={cls.cover_btns}>
+                        <CustomButton onClick={prepareTelegram} classNameBtn={cls.btn_stt} type='button'>
+                            <img src="./../../../src/assets/svg/notifications.svg" className={cls.icon_notifications}
+                                 alt=""/>
+                        </CustomButton>
+                        <CustomButton classNameBtn={cls.btn_stt} type='button' onClick={openModalSafetyConnection}>
+                            <img src="./../../../src/assets/svg/safety.svg" alt=""/>
+                        </CustomButton>
+                        <CustomButton classNameBtn={cls.btn_connect_login} type='button' onClick={connectAccount}>
+                            {isConnected ? t('logout') : t('connect')}
+                        </CustomButton>
+                    </div>
+                </div>
                 {!authoriedInfo?.hasAccountIpPump &&
                     <NotAuthorizedUser
                         loggedIn={authoriedInfo.loggedIn}
@@ -231,34 +260,6 @@ const MainIqPumpWindow = () => {
                         test={change}
                     />
                 }
-                    <div className={cls.notification_actions_btn}>
-                        <CustomSelect
-                            options={LANGUAGES}
-                            classNameWrapper={cls.select_wrap}
-                            classNameChosenValue={cls.select_chosen_value}
-                            classNameOption={cls.select_option}
-                            classNameShowed={cls.select_show_list}
-                            chosenValue={i18next.language}
-                            classNameBodyList={cls.selet_list}
-                            classNameTextWithImage={cls.select_text}
-                            onSelect={changeLanguage}
-                            classNameIcon={cls.icon}
-                            handleOpenMenu={openMenu}
-                            isOpenMenu={showSelectMenu}
-                            classNameBlockList={cls.bllock_list}
-                        />
-                        <div className={cls.cover_btns}>
-                            <CustomButton onClick={prepareTelegram} classNameBtn={cls.btn_stt} type='button'>
-                                <img src="./../../../src/assets/svg/notifications.svg" className={cls.icon_notifications} alt=""/>
-                            </CustomButton>
-                            <CustomButton classNameBtn={cls.btn_stt} type='button' onClick={openModalSafetyConnection}>
-                                <img src="./../../../src/assets/svg/safety.svg" alt=""/>
-                            </CustomButton>
-                            <CustomButton classNameBtn={cls.btn_connect_login} type='button' onClick={connectAccount}>
-                                {isConnected ? t('logout') : t('connect')}
-                            </CustomButton>
-                        </div>
-                    </div>
             </div>
             <Portal whereToAdd={document.body}>
                 <Modal show={modalNotifications?.isOpen} closing={modalNotifications?.isClosing}>
