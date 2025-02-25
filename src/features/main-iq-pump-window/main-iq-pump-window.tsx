@@ -1,7 +1,7 @@
 import React  from 'react';
 import NotAuthorizedUser from "../not-authorized-user/not-authorized-user.tsx";
-import {ERROR_CHECK_TG, IUserInfo, ModalIndicators, SEND_MSG_TO_TELEGRAM} from "../../entities/entities.ts";
-import {useAppKit, useAppKitState, useWalletInfo} from "@reown/appkit/react";
+import {ERROR_CHECK_TG, IUserInfo, ModalIndicators} from "../../entities/entities.ts";
+import {useAppKit} from "@reown/appkit/react";
 import cls from './main-iq-pump-window.module.scss';
 import CustomButton from "../../shared/ui/custom-button/custom-button.tsx";
 import { useAppKitAccount, useAppKitNetwork, useAppKitProvider } from '@reown/appkit/react';
