@@ -2,229 +2,229 @@
 @use '../mixins';
 @use './globalIndex';
 @use './global';
-
-// Файл для общих стилей
-// стиль для зеленой кнопки
-.btn_main {
-    background-color: globalIndex.$btn_background;
-    color: globalIndex.$btn_color;
-    border: none;
-    cursor: pointer;
-    box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
-    transition:
-        background-color ease 0.3s,
-        box-shadow ease 0.3s;
-
-    @media (any-hover: hover) {
-        &:hover {
-            background-color: darken(globalIndex.$btn_background_hover, 10%);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition:
-                background-color ease 0.3s,
-                box-shadow ease 0.3s;
-        }
-    }
-}
-
-.btn_swap {
-    background-color: #ddfc91;
-    color: globalIndex.$btn_color;
-    border: none;
-    cursor: pointer;
-    box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
-    transition:
-        background-color ease 0.3s,
-        box-shadow ease 0.3s;
-
-    @media (any-hover: hover) {
-        &:hover {
-            background-color: darken(#c0df72, 10%);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition:
-                background-color ease 0.3s,
-                box-shadow ease 0.3s;
-        }
-    }
-}
-
-.input_profile {
-    overflow: auto;
-    border-radius: mixins.rem(10);
-    background: globalIndex.$background_colour_additional_accent_second;
-    border: mixins.rem(1) solid transparent;
-    outline: mixins.rem(1) transparent;
-    padding-top: mixins.rem(7);
-    padding-bottom: mixins.rem(7);
-    padding-left: mixins.rem(20);
-    padding-right: mixins.rem(20);
-    font-size: mixins.rem(16);
-    font-family: globalIndex.$font_family_main;
-    line-height: globalIndex.$line_height;
-    color: #7c7c7c;
-    height: 100%;
-    width: 100%;
-    &::placeholder {
-        color: #7c7c7c;
-        font-size: mixins.rem(16);
-        font-family: globalIndex.$font_family_main;
-    }
-    transition: border ease 0.3s 0s;
-
-    @media (any-hover: hover) {
-        &:hover {
-            transition: border ease 0.3s 0s;
-            border: mixins.rem(1) solid globalIndex.$background_colour_additional_accent;
-        }
-    }
-}
-
-.titleBlock {
-    text-align: center;
-    font-family: globalIndex.$font_family_main;
-    font-weight: 700;
-    font-size: mixins.rem(24);
-    line-height: globalIndex.$line_height;
-
-    //font-family: globalIndex.$font_family_title;
-    //font-size: mixins.rem(48);
-    //max-width: mixins.rem(377);
-    //margin-top: mixins.rem(40);
-}
-
-//для попапов
-.titlePopup {
-    font-family: globalIndex.$font_family_main;
-    background-color: #8ffba3;
-    width: mixins.rem(207);
-    height: mixins.rem(56);
-    color: #409798;
-    font-weight: 900;
-    border-bottom-left-radius: mixins.rem(25);
-    border-bottom-right-radius: mixins.rem(20);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-// отспупы для страниц
-.paddingPages {
-    padding-top: mixins.rem(globalIndex.$padding_top_pages);
-    padding-bottom: mixins.rem(globalIndex.$padding_bottom_pages);
-    flex: 1 1 auto;
-    @include mixins.adaptiveValue('padding-bottom', globalIndex.$padding_top_pages, 30, 3, global.$tablet, global.$mobileSmall);
-    @include mixins.adaptiveValue('padding-top', globalIndex.$padding_bottom_pages, 30, 3, global.$tablet, global.$mobileSmall);
-}
-
-// стиль основного текста
-.mainFontSize {
-    font-size: globalIndex.$font_size_main;
-    font-family: globalIndex.$font_family_main;
-    font-weight: globalIndex.$font_weight_main;
-    line-height: globalIndex.$line_height_main;
-    @include mixins.adaptiveValue('font-size', globalIndex.$font_size_main, 16, 3, global.$tablet, global.$mobileSmall);
-}
-
-// стиль для заголовков
-.titleFontSize {
-    font-size: globalIndex.$font_size_title;
-    font-family: globalIndex.$font_family_main;
-    font-weight: globalIndex.$font_weight_title;
-    line-height: globalIndex.$line_height_title;
-    color: globalIndex.$color_title;
-    @include mixins.adaptiveValue('font-size', globalIndex.$font_size_main, 18, 3, global.$tablet, global.$mobileSmall);
-}
-
-.paddingsForContentModal {
-    padding-top: mixins.rem(10);
-    padding-bottom: mixins.rem(30);
-    padding-left: mixins.rem(40);
-    padding-right: mixins.rem(40);
-}
-
-.svgOkayArrow {
-    width: mixins.rem(25);
-    height: mixins.rem(25);
-    fill: #ffffff;
-}
-
-.svgIconArrow {
-    width: mixins.rem(22);
-    height: mixins.rem(22);
-    fill: #58c89c;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-// шаблон для текста
-.styleForAdditionalText {
-    font-size: mixins.rem(globalIndex.$font_size_additional);
-    font-weight: globalIndex.$font_weight_additional;
-    color: globalIndex.$color_main_second;
-    font-family: globalIndex.$font_family_main;
-}
-
-.paddingInputs {
-    overflow: auto;
-    border-radius: mixins.rem(10);
-    background: globalIndex.$background_colour_additional_accent_second;
-    border: mixins.rem(1) solid transparent;
-    outline: mixins.rem(1) transparent;
-    padding-top: mixins.rem(7);
-    padding-bottom: mixins.rem(7);
-    padding-left: mixins.rem(15);
-    padding-right: mixins.rem(15);
-}
-
-.inputsStyle {
-    font-family: globalIndex.$font_family_main;
-    font-size: mixins.rem(14);
-    line-height: globalIndex.$line_height_main;
-    letter-spacing: mixins.em(1.05);
-    color: globalIndex.$color_hover_first;
-    font-weight: 500;
-    will-change: transform;
-}
-
-.btnGreen {
-    color: #008279 !important;
-    font-size: mixins.rem(13);
-    text-decoration: none;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border-radius: mixins.rem(50);
-    background-color: #96fac5;
-    text-align: center;
-    font-weight: 500;
-    border: mixins.rem(2) transparent;
-    transition: background-color ease 0.3s 0s;
-
-    @media (any-hover: hover) {
-        &:hover {
-            transition: background-color ease 0.3s 0s;
-            background-color: #518f6f;
-        }
-    }
-}
-
-// -------------------------
-
-.close_svg {
-    width: mixins.rem(30);
-    height: mixins.rem(30);
-    fill: #cecece;
-    transition: fill ease 0.3s 0s;
-
-    @media (any-hover: hover) {
-        &:hover {
-            transition: fill ease 0.3s 0s;
-            fill: #aeaaaa;
-        }
-    }
-}
-
-.eth-card {
-    box-shadow: mixins.rem(4) mixins.rem(2) mixins.rem(6) mixins.rem(2) rgba(41, 41, 41, 0.13);
-}
+//
+//// Файл для общих стилей
+//// стиль для зеленой кнопки
+//.btn_main {
+//    background-color: globalIndex.$btn_background;
+//    color: globalIndex.$btn_color;
+//    border: none;
+//    cursor: pointer;
+//    box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
+//    transition:
+//        background-color ease 0.3s,
+//        box-shadow ease 0.3s;
+//
+//    @media (any-hover: hover) {
+//        &:hover {
+//            background-color: darken(globalIndex.$btn_background_hover, 10%);
+//            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//            transition:
+//                background-color ease 0.3s,
+//                box-shadow ease 0.3s;
+//        }
+//    }
+//}
+//
+//.btn_swap {
+//    background-color: #ddfc91;
+//    color: globalIndex.$btn_color;
+//    border: none;
+//    cursor: pointer;
+//    box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
+//    transition:
+//        background-color ease 0.3s,
+//        box-shadow ease 0.3s;
+//
+//    @media (any-hover: hover) {
+//        &:hover {
+//            background-color: darken(#c0df72, 10%);
+//            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//            transition:
+//                background-color ease 0.3s,
+//                box-shadow ease 0.3s;
+//        }
+//    }
+//}
+//
+//.input_profile {
+//    overflow: auto;
+//    border-radius: mixins.rem(10);
+//    background: globalIndex.$background_colour_additional_accent_second;
+//    border: mixins.rem(1) solid transparent;
+//    outline: mixins.rem(1) transparent;
+//    padding-top: mixins.rem(7);
+//    padding-bottom: mixins.rem(7);
+//    padding-left: mixins.rem(20);
+//    padding-right: mixins.rem(20);
+//    font-size: mixins.rem(16);
+//    font-family: globalIndex.$font_family_main;
+//    line-height: globalIndex.$line_height;
+//    color: #7c7c7c;
+//    height: 100%;
+//    width: 100%;
+//    &::placeholder {
+//        color: #7c7c7c;
+//        font-size: mixins.rem(16);
+//        font-family: globalIndex.$font_family_main;
+//    }
+//    transition: border ease 0.3s 0s;
+//
+//    @media (any-hover: hover) {
+//        &:hover {
+//            transition: border ease 0.3s 0s;
+//            border: mixins.rem(1) solid globalIndex.$background_colour_additional_accent;
+//        }
+//    }
+//}
+//
+//.titleBlock {
+//    text-align: center;
+//    font-family: globalIndex.$font_family_main;
+//    font-weight: 700;
+//    font-size: mixins.rem(24);
+//    line-height: globalIndex.$line_height;
+//
+//    //font-family: globalIndex.$font_family_title;
+//    //font-size: mixins.rem(48);
+//    //max-width: mixins.rem(377);
+//    //margin-top: mixins.rem(40);
+//}
+//
+////для попапов
+//.titlePopup {
+//    font-family: globalIndex.$font_family_main;
+//    background-color: #8ffba3;
+//    width: mixins.rem(207);
+//    height: mixins.rem(56);
+//    color: #409798;
+//    font-weight: 900;
+//    border-bottom-left-radius: mixins.rem(25);
+//    border-bottom-right-radius: mixins.rem(20);
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//}
+//
+//// отспупы для страниц
+//.paddingPages {
+//    padding-top: mixins.rem(globalIndex.$padding_top_pages);
+//    padding-bottom: mixins.rem(globalIndex.$padding_bottom_pages);
+//    flex: 1 1 auto;
+//    @include mixins.adaptiveValue('padding-bottom', globalIndex.$padding_top_pages, 30, 3, global.$tablet, global.$mobileSmall);
+//    @include mixins.adaptiveValue('padding-top', globalIndex.$padding_bottom_pages, 30, 3, global.$tablet, global.$mobileSmall);
+//}
+//
+//// стиль основного текста
+//.mainFontSize {
+//    font-size: globalIndex.$font_size_main;
+//    font-family: globalIndex.$font_family_main;
+//    font-weight: globalIndex.$font_weight_main;
+//    line-height: globalIndex.$line_height_main;
+//    @include mixins.adaptiveValue('font-size', globalIndex.$font_size_main, 16, 3, global.$tablet, global.$mobileSmall);
+//}
+//
+//// стиль для заголовков
+//.titleFontSize {
+//    font-size: globalIndex.$font_size_title;
+//    font-family: globalIndex.$font_family_main;
+//    font-weight: globalIndex.$font_weight_title;
+//    line-height: globalIndex.$line_height_title;
+//    color: globalIndex.$color_title;
+//    @include mixins.adaptiveValue('font-size', globalIndex.$font_size_main, 18, 3, global.$tablet, global.$mobileSmall);
+//}
+//
+//.paddingsForContentModal {
+//    padding-top: mixins.rem(10);
+//    padding-bottom: mixins.rem(30);
+//    padding-left: mixins.rem(40);
+//    padding-right: mixins.rem(40);
+//}
+//
+//.svgOkayArrow {
+//    width: mixins.rem(25);
+//    height: mixins.rem(25);
+//    fill: #ffffff;
+//}
+//
+//.svgIconArrow {
+//    width: mixins.rem(22);
+//    height: mixins.rem(22);
+//    fill: #58c89c;
+//    position: absolute;
+//    right: 0;
+//    top: 0;
+//}
+//
+//// шаблон для текста
+//.styleForAdditionalText {
+//    font-size: mixins.rem(globalIndex.$font_size_additional);
+//    font-weight: globalIndex.$font_weight_additional;
+//    color: globalIndex.$color_main_second;
+//    font-family: globalIndex.$font_family_main;
+//}
+//
+//.paddingInputs {
+//    overflow: auto;
+//    border-radius: mixins.rem(10);
+//    background: globalIndex.$background_colour_additional_accent_second;
+//    border: mixins.rem(1) solid transparent;
+//    outline: mixins.rem(1) transparent;
+//    padding-top: mixins.rem(7);
+//    padding-bottom: mixins.rem(7);
+//    padding-left: mixins.rem(15);
+//    padding-right: mixins.rem(15);
+//}
+//
+//.inputsStyle {
+//    font-family: globalIndex.$font_family_main;
+//    font-size: mixins.rem(14);
+//    line-height: globalIndex.$line_height_main;
+//    letter-spacing: mixins.em(1.05);
+//    color: globalIndex.$color_hover_first;
+//    font-weight: 500;
+//    will-change: transform;
+//}
+//
+//.btnGreen {
+//    color: #008279 !important;
+//    font-size: mixins.rem(13);
+//    text-decoration: none;
+//    display: flex;
+//    flex-direction: row;
+//    align-items: center;
+//    justify-content: center;
+//    border-radius: mixins.rem(50);
+//    background-color: #96fac5;
+//    text-align: center;
+//    font-weight: 500;
+//    border: mixins.rem(2) transparent;
+//    transition: background-color ease 0.3s 0s;
+//
+//    @media (any-hover: hover) {
+//        &:hover {
+//            transition: background-color ease 0.3s 0s;
+//            background-color: #518f6f;
+//        }
+//    }
+//}
+//
+//// -------------------------
+//
+//.close_svg {
+//    width: mixins.rem(30);
+//    height: mixins.rem(30);
+//    fill: #cecece;
+//    transition: fill ease 0.3s 0s;
+//
+//    @media (any-hover: hover) {
+//        &:hover {
+//            transition: fill ease 0.3s 0s;
+//            fill: #aeaaaa;
+//        }
+//    }
+//}
+//
+//.eth-card {
+//    box-shadow: mixins.rem(4) mixins.rem(2) mixins.rem(6) mixins.rem(2) rgba(41, 41, 41, 0.13);
+//}

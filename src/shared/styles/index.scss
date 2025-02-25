@@ -3,8 +3,8 @@
 @use './../styles/variable/global';
 @use './../styles/variable/globalIndex';
 @use './../styles/variable/common';
-@import './../styles/reset';
-@import './../styles/variable/fonts';
+@use './../styles/reset';
+@use './../styles/variable/fonts';
 
 body {
     // Скролл заблокирован

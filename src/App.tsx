@@ -1,13 +1,14 @@
 import {createAppKit } from '@reown/appkit/react';
 import {EthersAdapter} from "@reown/appkit-adapter-ethers";
 import { arbitrum, } from '@reown/appkit/networks'
+import { ToastContainer } from 'react-toastify';
 
 import MainIqPumpWindow from "./features/main-iq-pump-window/main-iq-pump-window.tsx";
 
-const projectId = process.env.REACT_APP_APP_KIT_ID || 'as';
-export const FUNDING_WALLET_IQ_PUMP = process.env.REACT_APP_FUNDING_WALLET_ERC;
+const projectId = import.meta.env.VITE_APP_APP_KIT_ID;
+export const FUNDING_WALLET_IQ_PUMP = import.meta.env.VITE_APP_FUNDING_WALLET_ERC;
 
-
+console.log(projectId)
 if (!projectId) {
   throw new Error('REACT_APP_APP_KIT_ID is not defined in the environment variables');
 }
@@ -42,6 +43,7 @@ function App() {
   return (
       <div>
         <MainIqPumpWindow />
+        <ToastContainer />
       </div>
   )
 }

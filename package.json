@@ -16,9 +16,14 @@
     "@tanstack/react-query": "^5.66.9",
     "axios": "^1.7.9",
     "ethers": "^6.13.5",
+    "i18next": "^24.2.2",
     "nod": "^0.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-countdown": "^2.3.6",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.4.1",
+    "react-toastify": "^11.0.5",
+    "vite-plugin-svgr": "^4.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

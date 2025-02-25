@@ -37,8 +37,11 @@
 }
 
 .title_main {
-    @extend .titleBlock;
-    max-width: mixins.rem(537);
+    text-align: center;
+    font-family: globalIndex.$font_family_main;
+    font-weight: 700;
+    font-size: mixins.rem(24);
+    line-height: globalIndex.$line_height;    max-width: mixins.rem(537);
     @include mixins.adaptiveValue('font-size', 24, 16, 3, 800, 440);
 }
 
@@ -48,18 +51,27 @@
     border-radius: 50%;
 }
 
+.icon {
+    width: mixins.rem(120);
+    height: mixins.rem(169);
+    object-fit: contain;
+}
+
 .wrapper {
     display: flex;
     flex-direction: column;
-    background: radial-gradient(circle farthest-side at 50% 17%, #d21c72 0%, #bc188d 3%, #600f5f 17%, #2f164b 25%);
     border-radius: mixins.rem(15);
     align-items: center;
-    padding-top: mixins.rem(30);
     padding-bottom: mixins.rem(40);
     padding-left: mixins.rem(30);
     padding-right: mixins.rem(30);
-    row-gap: mixins.rem(60);
+    row-gap: mixins.rem(80);
     box-sizing: border-box;
+
+    padding-top: mixins.rem(100);
+
+    @include mixins.adaptiveHeight('padding-top', 110, 100, 3, 1000, 500);
+
 
     @media (min-width: mixins.em(global.$mobile)) {
         height: 98%;
@@ -99,10 +111,18 @@
     align-items: center;
 }
 
+.balance_body_block {
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    row-gap: mixins.rem(30);
+}
+
 .title {
     font-family: 'Luckiest Guy';
     font-weight: 700;
     color: #91fca5;
+    font-size: mixins.rem(26);
 }
 
 .svg_brain {
@@ -115,9 +135,11 @@
 }
 
 .user_name_tg {
+    font-weight: 800;
 }
 
 .adress {
+    font-weight: 400;
 }
 
 .balance_block {
@@ -130,7 +152,7 @@
     text-align: center;
     border-radius: mixins.rem(15);
     row-gap: mixins.rem(20);
-    padding-top: mixins.rem(20);
+    padding-top: mixins.rem(30);
     padding-bottom: mixins.rem(20);
     padding-left: mixins.rem(10);
     padding-right: mixins.rem(10);
@@ -263,9 +285,19 @@
     row-gap: mixins.rem(20);
 }
 
+.cover_btn {
+    display: flex;
+    flex-direction: column;
+    row-gap: mixins.rem(20);
+    align-items: center;
+}
+
+.cover_btn_send_cover {
+    color: #442d5d;
+}
+
 .btn_send {
     background-color: #39e476;
-    color: #ffffff;
     border: none;
     cursor: pointer;
     box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
@@ -316,8 +348,7 @@
 
     @media (any-hover: hover) {
         &:hover {
-            background-color: darken(globalIndex.$btn_background_hover, 10%);
-            //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: rgba(220, 156, 133, 0.8);
             transition:
                 background-color ease 0.3s,
                 box-shadow ease 0.3s;

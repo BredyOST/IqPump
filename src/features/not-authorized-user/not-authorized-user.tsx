@@ -1,58 +1,63 @@
+import cls from './not-authorized-user.module.scss';
+import {IUserInfo} from "../../entities/entities.ts";
+import {useState} from "react";
 import React from 'react';
-import cls from './dontHaveAccont.module.scss';
-import { ReactComponent as SvgBrain } from './../../../assets/svg/brain.svg';
-import CustomButton from '../../../shared/ui/сustomButton/CustomButton';
-import { useAppSelector } from '../../../shared/redux/hooks/hooks';
-import { isHaveAccount } from '../iqPumpService/iqPumpMainWindow.tsx';
+import {useTranslation} from "react-i18next";
 
-const DonHaveAccount = () => {
-    const { telegramUsername, loggedIn } = useAppSelector(({ authSlice }) => authSlice);
+export interface INotAuthorizedUserProps extends Pick<IUserInfo,
+    'telegramUsername' |
+    'loggedIn' |
+    'hasAccountIpPump'> {}
 
-    if (telegramUsername && loggedIn && isHaveAccount) {
-        return null;
-    }
+
+const NotAuthorizedUser = ({
+                               loggedIn,
+                               telegramUsername,
+                               hasAccountIpPump,
+                           }: INotAuthorizedUserProps) => {
+
+
+    const [textInfo, setTextInfo] = useState<string>('');
+    const { t, i18n } = useTranslation();
+
+    React.useEffect(() => {
+
+        setTextInfo(
+            !loggedIn
+                ? t('needToGetAccess')
+                : !telegramUsername
+                    ? t('needToGetAccess')
+                    : !hasAccountIpPump
+                        ? t('dontHaveAnAccount')
+                        : ''
+        );
+    }, [loggedIn, telegramUsername, hasAccountIpPump,i18n.language]);
+
 
     return (
         <div className={cls.wrapper}>
             <div className={cls.title_cover}>
-                <SvgBrain className={cls.svg_brain} />
+                <img src="./../../../public/svg/brain.svg" className={cls.icon} alt="icons"/>
                 <h3 className={cls.title}>IQ PUMP</h3>
             </div>
-            <div className={cls.balance_block}>
-                {!loggedIn && (
+            <div className={cls.cover}>
+                <div className={cls.balance_block}>
                     <h3 className={cls.subtitle_block}>
-                        Для работы <br />
-                        с функционалом пополнения <br />
-                        и вывода монет, пожалуйста <br />
-                        авторизуйтесь на сайте и подключите <br />
-                        уведомления в Telegram <br />
+                        {textInfo}
                     </h3>
-                )}
-
-                {!isHaveAccount && loggedIn && (
-                    <h3 className={cls.subtitle_block}>
-                        У вас нет <br />
-                        зарегистрированного аккаунта <br />в IQ PUMP
-                    </h3>
-                )}
-
-                {isHaveAccount && loggedIn && !telegramUsername && (
-                    <h3 className={cls.subtitle_block}>
-                        Для работы <br />
-                        с функционалом пополнения <br />
-                        и вывода монет, пожалуйста <br />
-                        авторизуйтесь и подключите <br />
-                        уведомления в Telegram <br />
-                    </h3>
-                )}
-            </div>
-            <div className={cls.cover_btn_send_cover}>
-                <CustomButton classNameBtn={cls.btn_send} type='button'>
-                    Перейти в игру
-                </CustomButton>
+                </div>
+                <div className={cls.cover_btn_send_cover}>
+                    <a href='https://web.telegram.org/a/#7893128019'
+                       target='_blank'
+                        className={cls.btn_send}
+                        type='button'
+                    >
+                        {t('toIqPump')}
+                    </a>
+                </div>
             </div>
         </div>
     );
 };
 
-export default DonHaveAccount;
+export default NotAuthorizedUser;

@@ -8,6 +8,7 @@ declare module '*.svg' {
     export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
+
 declare module '*.png' {
     const value: string;
     export = value;
@@ -17,3 +18,4 @@ declare module '*.mp4' {
     const value: string;
     export = value;
 }
+
