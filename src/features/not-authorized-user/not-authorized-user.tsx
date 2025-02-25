@@ -48,7 +48,6 @@ const NotAuthorizedUser = ({
                 </div>
                 <div className={cls.cover_btn_send_cover}>
                     <button onClick={() => test(true)}
-                       target='_blank'
                        className={cls.btn_send}
                        type='button'
                     >

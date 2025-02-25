@@ -19,7 +19,6 @@ import Loader from "../../widjets/loader/loader.tsx";
 import { useTranslation } from 'react-i18next';
 import CustomSelect from "../../shared/ui/select/custom-select.tsx";
 import i18next from "i18next";
-import {b} from "vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P";
 
 const MainIqPumpWindow = () => {
 
