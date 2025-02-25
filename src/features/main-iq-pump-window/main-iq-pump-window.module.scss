@@ -190,6 +190,7 @@
   left: 0;
   top: 0;
   opacity: 0;
+  pointer-events: none;
   transform: translate(mixins.rem(-4), mixins.rem(-4));
   width: mixins.rem(140);
   row-gap: mixins.rem(5);
@@ -198,6 +199,7 @@
     transform: translate(mixins.rem(-4), mixins.rem(40));
     transition: transform ease 0.3s 0s, opacity ease 0.3s 0s;
     opacity: 1;
+    pointer-events: auto;
   }
 }
 
@@ -205,8 +207,6 @@
 
 .icon {
   border-radius: 50%;
-  //min-width: 100%;
-  //min-height: 100%;
   width: mixins.rem(30);
   height: mixins.rem(30);
   border-radius: 50%;

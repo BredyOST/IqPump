@@ -2,7 +2,6 @@ import cls from './safetyConnection.module.scss';
 import {IUserInfo} from "../../../entities/entities.ts";
 import CustomButton from "../../../shared/ui/custom-button/custom-button.tsx";
 import {useTranslation} from "react-i18next";
-import React from "react";
 
 interface ISafetyConnection {
     state: IUserInfo
@@ -13,7 +12,6 @@ interface ISafetyConnection {
 const SafetyConnection = ({
                             state,
                             setModalSafetyConnection,
-                              isLoadingHandler
                           }:ISafetyConnection) => {
 
     const { t } = useTranslation();

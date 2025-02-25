@@ -49,11 +49,11 @@ const NotificationTg = ({
             const data = { account: state?.wallet };
             const response = await axios.post('https://stt.market/api/notifications/check/', data);
             if (response.status === 200) {
-                let dd = response.data;
-                setState((prev) =>({...prev, telegramUsername: dd?.username}));
+                let responseData:any = response.data;
+                setState((prev) =>({...prev, telegramUsername: responseData?.username}));
 
                 if (requested) {
-                    if (dd.username !== '') {
+                    if (responseData.username !== '') {
                         closeModalSafetyConnection();
                     } else {
                         showAttention('Are you sure you have sent the code?', 'warning')
@@ -95,7 +95,7 @@ const NotificationTg = ({
             const data = { account: state?.wallet };
             const response = await axios.post('https://stt.market/api/notifications/create/', data);
             if (response.status === 200) {
-                let responseData = response.data;
+                let responseData:any = response.data;
                 if (responseData.status === 400) {
                     showAttention(responseData?.message, 'warning')
                 } else if (responseData.status === 200) {

@@ -1,8 +1,5 @@
-import React from 'react';
 import {LANGUGES_TYPE} from "../../../entities/entities.ts";
 import {LANGUAGES} from "../../../../index.const.ts";
-import {useTranslation} from "react-i18next";
-import i18next from "i18next";
 
 interface ICustomSelectProps<T> {
     options: T[]
@@ -28,7 +25,7 @@ const CustomSelect = ({
     classNameChosenValue,
                           classNameIcon,
                           chosenValue,
-                          classNameTextWithImage,
+
     classNameBodyList,
                           classNameShowed,
                           classNameOption,
@@ -37,8 +34,6 @@ const CustomSelect = ({
                           classNameBlockList
 
                       }: ICustomSelectProps<LANGUGES_TYPE>) => {
-
-    const { i18n } = useTranslation();
 
     return (
         <div className={classNameWrapper} onClick={handleOpenMenu}>

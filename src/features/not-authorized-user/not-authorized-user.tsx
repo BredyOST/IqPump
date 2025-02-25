@@ -1,21 +1,21 @@
 import cls from './not-authorized-user.module.scss';
-import {IUserInfo} from "../../entities/entities.ts";
 import {useState} from "react";
 import React from 'react';
 import {useTranslation} from "react-i18next";
 
-export interface INotAuthorizedUserProps extends Pick<IUserInfo,
-    'telegramUsername' |
-    'loggedIn' |
-    'hasAccountIpPump'> {}
-
+export interface INotAuthorizedUserProps {
+    telegramUsername:string;
+    loggedIn:boolean;
+    hasAccountIpPump:boolean;
+    test:(arg:boolean) => void;
+}
 
 const NotAuthorizedUser = ({
                                loggedIn,
                                telegramUsername,
                                hasAccountIpPump,
+                               test
                            }: INotAuthorizedUserProps) => {
-
 
     const [textInfo, setTextInfo] = useState<string>('');
     const { t, i18n } = useTranslation();
@@ -47,13 +47,21 @@ const NotAuthorizedUser = ({
                     </h3>
                 </div>
                 <div className={cls.cover_btn_send_cover}>
-                    <a href='https://web.telegram.org/a/#7893128019'
+                    <button onClick={() => test(true)}
                        target='_blank'
-                        className={cls.btn_send}
-                        type='button'
+                       className={cls.btn_send}
+                       type='button'
                     >
                         {t('toIqPump')}
-                    </a>
+                    </button>
+
+                    {/*<a href='https://web.telegram.org/a/#7893128019'*/}
+                    {/*   target='_blank'*/}
+                    {/*   className={cls.btn_send}*/}
+                    {/*   type='button'*/}
+                    {/*>*/}
+                    {/*    {t('toIqPump')}*/}
+                    {/*</a>*/}
                 </div>
             </div>
         </div>

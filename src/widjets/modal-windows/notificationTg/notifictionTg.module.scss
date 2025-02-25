@@ -2,6 +2,7 @@
 @use '../../../shared/styles/variable/global';
 @use '../../../shared/styles/mixins';
 @use '../../../shared/styles/variable/common';
+@use 'sass:color';
 
 .wrapper {
     padding-left: mixins.rem(30);
@@ -109,7 +110,8 @@
 
     @media (any-hover: hover) {
         &:hover {
-            background-color: darken(globalIndex.$btn_background_hover, 10%);
+            background-color: color.adjust(globalIndex.$btn_background_hover, $lightness: 10%);
+
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition:
                     background-color ease 0.3s,

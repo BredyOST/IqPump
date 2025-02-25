@@ -1,7 +1,7 @@
 import React  from 'react';
 import NotAuthorizedUser from "../not-authorized-user/not-authorized-user.tsx";
 import {ERROR_CHECK_TG, IUserInfo, ModalIndicators, SEND_MSG_TO_TELEGRAM} from "../../entities/entities.ts";
-import {modal, useAppKit} from "@reown/appkit/react";
+import {useAppKit} from "@reown/appkit/react";
 import cls from './main-iq-pump-window.module.scss';
 import CustomButton from "../../shared/ui/custom-button/custom-button.tsx";
 import { useAppKitAccount, useAppKitNetwork, useAppKitProvider } from '@reown/appkit/react';
@@ -19,6 +19,7 @@ import Loader from "../../widjets/loader/loader.tsx";
 import { useTranslation } from 'react-i18next';
 import CustomSelect from "../../shared/ui/select/custom-select.tsx";
 import i18next from "i18next";
+import {b} from "vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P";
 
 const MainIqPumpWindow = () => {
 
@@ -38,6 +39,7 @@ const MainIqPumpWindow = () => {
     const [isLoading, setIsLoading] = React.useState<{isLoad:boolean, text: string}>({isLoad:false, text: ''})
     const [isLoadingCheckingBalance, setIsLoadingCheckingBalance] = React.useState<boolean>(false)
     const [transactionSuccess, setTransactionSuccess] = React.useState<boolean>(false)
+    const [showSelectMenu, setShowSelectMenu] = React.useState<boolean>(false)
 
     const { t } = useTranslation();
 
@@ -55,19 +57,20 @@ const MainIqPumpWindow = () => {
             const response: any = await axios.post('https://stt.market/api/notifications/check/', data);
 
             if (response?.status === 200) {
-                let responseData:any = response?.data;
+                const responseData:any = response?.data;
 
                 setAuthoriedInfo((prev) => ({...prev, telegramUsername:responseData?.username}));
 
                 /** отправка уведомления*/
                 const data: { username: string } = { username: responseData?.username };
-                const res = await axios.post('https://stt.market/api/notifications/safety/', data);
+                await axios.post('https://stt.market/api/notifications/safety/', data);
                 showAttention(SEND_MSG_TO_TELEGRAM, 'success')
             }
             return true
         } catch (err) {
             showAttention(ERROR_CHECK_TG, 'error')
             console.error('Error checking notifications:', err);
+            return true
         } finally {
             setIsLoading({isLoad: false,  text: ''})
         }
@@ -118,7 +121,7 @@ const MainIqPumpWindow = () => {
             const response = await axios.post('https://stt.market/api/notifications/create/', data);
 
             if (response.status === 200) {
-                let responseData = response.data;
+                let responseData:any = response.data;
                 setModalNotifications({isOpen:true, isClosing: false})
 
                 if (responseData.status === 400) {
@@ -154,9 +157,10 @@ const MainIqPumpWindow = () => {
         }
     }, [walletProvider, chainId]);
 
+
    React.useEffect(() => {
         if (authoriedInfo?.wallet) checkNotifications();
-       setTimeout(() => setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:true})), 500)
+       setTimeout(() => setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:false})), 500)
 
    }, [authoriedInfo?.wallet]);
 
@@ -168,12 +172,8 @@ const MainIqPumpWindow = () => {
 
             const contract = new ethers.Contract(tokenContractAddress, tokenContractAbi, provider);
 
-            const res = await contract.totalSupply();
-
-            const totalSt = +(Number(await contract.totalSupply()) / Math.pow(10, 9)).toFixed(2);
-
             const stBalance = +(Number(await contract.balanceOf(authoriedInfo.wallet)) / Math.pow(10, 9) - 0.01).toFixed(2);
-            setAuthoriedInfo((prev) => ({...prev, balanceStt: stBalance}));
+            setAuthoriedInfo((prev) => ({...prev, balanceStt: stBalance.toString()}));
 
         } catch (err) {
             console.log(err);
@@ -187,19 +187,24 @@ const MainIqPumpWindow = () => {
         fetchBalanceData(walletProvider);
     }, [isConnected, authoriedInfo.wallet]);
 
-    const [showSelectMenu, setShowSelectMenu] = React.useState<boolean>(false)
 
     const openMenu:() => void = () => {
         setShowSelectMenu(prev => !prev)
     }
     const changeLanguage = (value:string) => {
         i18next.changeLanguage(value);
-        // setShowSelectMenu(false)
     }
 
     React.useEffect(() => {
         fetchBalanceData(walletProvider)
     },[transactionSuccess])
+
+    /** для теста*/
+    const change:(arg:boolean) => void = (value) => {
+       setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:value}))
+
+    }
+
 
     return (
         <div className={cls.overlay}>
@@ -209,6 +214,7 @@ const MainIqPumpWindow = () => {
                         loggedIn={authoriedInfo.loggedIn}
                         telegramUsername={authoriedInfo.telegramUsername}
                         hasAccountIpPump={authoriedInfo.hasAccountIpPump}
+                        test={change}
                     />
                 }
                 {authoriedInfo?.loggedIn && authoriedInfo?.hasAccountIpPump &&
@@ -222,6 +228,7 @@ const MainIqPumpWindow = () => {
                         provider={authoriedInfo?.provider}
                         setIsLoading={setIsLoading}
                         setTransactionSuccess={setTransactionSuccess}
+                        test={change}
                     />
                 }
                     <div className={cls.notification_actions_btn}>
