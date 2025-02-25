@@ -68,6 +68,7 @@
     padding-right: mixins.rem(30);
     row-gap: mixins.rem(80);
     box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0);
 
     //padding-top: mixins.rem(100);
 
