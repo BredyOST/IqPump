@@ -29,7 +29,7 @@
   row-gap: mixins.rem(50);
   box-sizing: border-box;
   overflow-y: scroll;
-
+  max-height: 100vh;
 
   @media(min-height: mixins.em(1101)) {
     background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 20%);
