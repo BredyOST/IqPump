@@ -207,6 +207,7 @@ const MainIqPumpWindow = () => {
 
     return (
         <div className={cls.overlay}>
+            {/*<div className="app_container">*/}
             <div className={cls.cover}>
                 <div className={cls.notification_actions_btn}>
                     <CustomSelect
@@ -283,6 +284,7 @@ const MainIqPumpWindow = () => {
             <Portal whereToAdd={document.body}>
                 <Loader isLoading={isLoading?.isLoad} text={isLoading?.text}></Loader>
             </Portal>
+            {/*</div>*/}
         </div>
     );
 };

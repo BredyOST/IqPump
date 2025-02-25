@@ -4,24 +4,28 @@
 @use './../../shared/styles/variable/common';
 @use 'sass:color';
 
+
   .overlay {
-    //position: relative;
-    //top: 0;
-    //left: 0;
-    //width: 100vw;
-    //height: 100vh;
-    //background-color: rgba(0, 0, 0, 0.9);
-    //z-index: 100;
-    //display: flex;
-    //align-items: center;
-    //justify-content: center;
+    display: flex;
+    min-width: 100vw;
+    min-height: 100%;
+    margin: 0 auto;
+  //  position: relative;
+  //  top: 0;
+  //  left: 0;
+  //  width: 100vw;
+  //  height: 100vh;
+  //  background-color: rgba(0, 0, 0, 0.9);
+  //  z-index: 100;
+  //  display: flex;
+  //  align-items: center;
+    justify-content: center;
     //overflow: hidden;
   }
 
 .cover {
   display: flex;
   flex-direction: column;
-  border-radius: mixins.rem(15);
   align-items: center;
   padding-bottom: mixins.rem(40);
   padding-left: mixins.rem(20);
@@ -29,20 +33,16 @@
   row-gap: mixins.rem(50);
   box-sizing: border-box;
   overflow-y: scroll;
-  max-height: 100vh;
 
   @media(min-height: mixins.em(1101)) {
     background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 20%);
   }
-
   @media(max-height: mixins.em(1100)) {
     background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 20%);
   }
-
   @media(max-height: mixins.em(1012)) {
     background: radial-gradient(circle farthest-side at 50% 22%, #d21c72 0%, #bc188d 3%, #600f5f 15%, #2f164b 23%);
   }
-
   @media(max-height: mixins.em(912)) {
     background: radial-gradient(circle farthest-side at 50% 23%, #d21c72 0%, #bc188d 3%, #600f5f 17%, #2f164b 25%);
   }
@@ -52,19 +52,15 @@
   @media(max-height: mixins.em(824)) {
     background: radial-gradient(circle farthest-side at 50% 26%, #d21c72 0%, #bc188d 3%, #600f5f 20%, #2f164b 30%);
   }
-
   @media(max-height: mixins.em(740)) {
     background: radial-gradient(circle farthest-side at 50% 28%, #d21c72 0%, #bc188d 3%, #600f5f 22%, #2f164b 33%);
   }
-
   @media(max-height: mixins.em(670)) {
     background: radial-gradient(circle farthest-side at 50% 30%, #d21c72 0%, #bc188d 3%, #600f5f 28%, #2f164b 39%);
   }
-
   @media(max-height: mixins.em(600)) {
     background: radial-gradient(circle farthest-side at 50% 34%, #d21c72 0%, #bc188d 3%, #600f5f 28%, #2f164b 39%);
   }
-
   @media(max-height: mixins.em(585)) {
     background: radial-gradient(circle farthest-side at 50% 34%, #d21c72 0%, #bc188d 3%, #600f5f 32%, #2f164b 42%);
   }
@@ -82,14 +78,15 @@
     position: relative;
     width: auto;
     aspect-ratio: 9 / 16;
+    border-radius: mixins.rem(15);
   }
 
   @media (max-width: mixins.em(global.$mobile)) {
     position: relative;
-    width: 98%;
-    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
   }
-  
+
   @media (max-width: mixins.em(global.$mobile)) {
     padding-left: mixins.rem(10);
     padding-right: mixins.rem(10);
@@ -98,8 +95,107 @@
   @media (max-width: mixins.em(450)) {
     min-height: 98vh;
   }
-  
+
 }
+
+
+
+//  .overlay {
+//    //position: relative;
+//    //top: 0;
+//    //left: 0;
+//    //width: 100vw;
+//    //height: 100vh;
+//    //background-color: rgba(0, 0, 0, 0.9);
+//    //z-index: 100;
+//    //display: flex;
+//    //align-items: center;
+//    //justify-content: center;
+//    //overflow: hidden;
+//  }
+//
+//.cover {
+//  display: flex;
+//  flex-direction: column;
+//  border-radius: mixins.rem(15);
+//  align-items: center;
+//  padding-bottom: mixins.rem(40);
+//  padding-left: mixins.rem(20);
+//  padding-right: mixins.rem(20);
+//  row-gap: mixins.rem(50);
+//  box-sizing: border-box;
+//  overflow-y: scroll;
+//
+//
+//  @media(min-height: mixins.em(1101)) {
+//    background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 20%);
+//  }
+//
+//  @media(max-height: mixins.em(1100)) {
+//    background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 20%);
+//  }
+//
+//  @media(max-height: mixins.em(1012)) {
+//    background: radial-gradient(circle farthest-side at 50% 22%, #d21c72 0%, #bc188d 3%, #600f5f 15%, #2f164b 23%);
+//  }
+//
+//  @media(max-height: mixins.em(912)) {
+//    background: radial-gradient(circle farthest-side at 50% 23%, #d21c72 0%, #bc188d 3%, #600f5f 17%, #2f164b 25%);
+//  }
+//  @media(max-height: mixins.em(878)) {
+//    background: radial-gradient(circle farthest-side at 50% 24%, #d21c72 0%, #bc188d 3%, #600f5f 20%, #2f164b 27%);
+//  }
+//  @media(max-height: mixins.em(824)) {
+//    background: radial-gradient(circle farthest-side at 50% 26%, #d21c72 0%, #bc188d 3%, #600f5f 20%, #2f164b 30%);
+//  }
+//
+//  @media(max-height: mixins.em(740)) {
+//    background: radial-gradient(circle farthest-side at 50% 28%, #d21c72 0%, #bc188d 3%, #600f5f 22%, #2f164b 33%);
+//  }
+//
+//  @media(max-height: mixins.em(670)) {
+//    background: radial-gradient(circle farthest-side at 50% 30%, #d21c72 0%, #bc188d 3%, #600f5f 28%, #2f164b 39%);
+//  }
+//
+//  @media(max-height: mixins.em(600)) {
+//    background: radial-gradient(circle farthest-side at 50% 34%, #d21c72 0%, #bc188d 3%, #600f5f 28%, #2f164b 39%);
+//  }
+//
+//  @media(max-height: mixins.em(585)) {
+//    background: radial-gradient(circle farthest-side at 50% 34%, #d21c72 0%, #bc188d 3%, #600f5f 32%, #2f164b 42%);
+//  }
+//  @media(max-height: mixins.em(565)) {
+//    background: radial-gradient(circle farthest-side at 50% 34%, #d21c72 0%, #bc188d 3%, #600f5f 36%, #2f164b 46%);
+//  }
+//
+//  @media(max-height: mixins.em(565)) {
+//    background: radial-gradient(circle farthest-side at 50% 34%, #d21c72 0%, #bc188d 3%, #600f5f 36%, #2f164b 54%);
+//  }
+//
+//  @media (min-width: mixins.em(global.$mobile)) {
+//    height: 98%;
+//    max-width: 100%;
+//    position: relative;
+//    width: auto;
+//    aspect-ratio: 9 / 16;
+//  }
+//
+//  @media (max-width: mixins.em(global.$mobile)) {
+//    position: relative;
+//    width: 98%;
+//    height: 100%;
+//  }
+//
+//  @media (max-width: mixins.em(global.$mobile)) {
+//    padding-left: mixins.rem(10);
+//    padding-right: mixins.rem(10);
+//  }
+//
+//  @media (max-width: mixins.em(450)) {
+//    min-height: 98vh;
+//  }
+//
+//}
 
 .notification_actions_btn {
   display: flex;

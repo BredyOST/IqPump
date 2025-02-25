@@ -41,9 +41,11 @@ createAppKit({
 function App() {
 
   return (
-      <div>
+      <div className="wrapper">
+        {/*<div className="app_container">*/}
             <MainIqPumpWindow />
-            <ToastContainer />
+        {/*</div>*/}
+        <ToastContainer />
       </div>
   )
 }
