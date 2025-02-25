@@ -9,7 +9,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
     z-index: 100;
     display: flex;
@@ -29,6 +29,7 @@
   row-gap: mixins.rem(50);
   box-sizing: border-box;
   overflow-y: scroll;
+
 
   @media(min-height: mixins.em(1101)) {
     background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 20%);
