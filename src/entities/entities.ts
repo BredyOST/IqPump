@@ -2,6 +2,10 @@
 
 export interface IUserInfo {
     loggedIn:boolean;
-    wallet:string | null;
-    telegramUsername: string | null;
+    wallet:string;
+    telegramUsername: string;
+    hasAccountIpPump:boolean;
+    telegramCode:string | null;
+    telegramValid:boolean;
+    balanceStt:string | ''
 }
