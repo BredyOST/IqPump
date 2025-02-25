@@ -123,6 +123,61 @@
     }
 }
 
+@mixin adaptiveHeight($property, $startSize, $minSize, $keepSize: 0, $heightFrom: 2500, $heightTo: global.$minHeight) {
+    @if $startSize == 0 { $startSize: 0.000001; }
+    @if $minSize == 0 { $minSize: 0.000001; }
+
+    // Для calc();
+    $addSize: math.div($startSize - $minSize, 16);
+
+    //@if $heightFrom == 2500 and global.$maxHeightContainer == 0 {
+    //    $heightFrom: global.$maxHeight;
+    //}
+
+    // Брейкпоинты в EM
+    $heightFromMedia: em($heightFrom);
+    $heightToMedia: em($heightTo);
+
+    // Формула плавающего значения
+    $slope: math.div(($startSize - $minSize), ($heightFrom - $heightTo));
+    $yIntersection: -$heightTo * $slope + $minSize;
+    @if $yIntersection == 0 { $yIntersection: 0.000001; }
+
+    $flyValue: #{rem($yIntersection)}' + ' #{$slope * 100}vh;
+
+    // Получение значения свойства
+    $propertyValue: #{'clamp(' rem($minSize) ',' $flyValue ',' rem($startSize) ')'};
+
+    // Если отрицательные значения
+    @if $minSize > $startSize {
+        $propertyValue: #{'clamp(' rem($startSize) ',' $flyValue ',' rem($minSize) ')'};
+    }
+
+    // Устанавливаем значения по умолчанию
+    @if $keepSize != 1 and $keepSize != 3 {
+        @media (min-height: $heightFromMedia) {
+            #{$property}: rem($startSize);
+        }
+    }
+
+    // Адаптируем размер в промежутке между указанными высотами вьюпорта
+    @media (min-height: $heightToMedia) and (max-height: $heightFromMedia) {
+        @supports (#{$property}: $propertyValue) {
+            #{$property}: $propertyValue;
+        }
+        @supports not (#{$property}: $propertyValue) {
+            #{$property}: calc( #{rem($minSize)} + #{$addSize} * (100vh - #{rem($heightTo)}) / #{math.div($heightFrom, 16) - math.div($heightTo, 16)} );
+        }
+    }
+
+    @if $keepSize != 1 and $keepSize != 2 {
+        @media (max-height: $heightToMedia) {
+            #{$property}: rem($minSize);
+        }
+    }
+}
+
+
 @mixin media($from: null, $to: null) {
     @if $from != null and $to != null {
         @media (min-width: em($from)) and (max-width: em($to)) {
