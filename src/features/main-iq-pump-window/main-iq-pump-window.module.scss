@@ -202,17 +202,13 @@
   column-gap: mixins.rem(20);
   justify-content: space-between;
   font-family: globalIndex.$font_family_fourth;
-  //position: absolute;
-  //left: 0;
-  //top: 0;
-  //transform: translate(mixins.rem(0), mixins.rem(0));
   padding-right: mixins.rem(10);
-  //padding-left: mixins.rem(10);
+  padding-left: mixins.rem(10);
   padding-top: mixins.rem(10);
   min-width: 100%;
   align-items: center;
 
-  //@include mixins.adaptiveValue('padding-left', 10, 10, 3, 500, 400);
+  @include mixins.adaptiveValue('padding-left', 10, 10, 3, 500, 400);
 }
 
 
@@ -286,6 +282,7 @@
   left: 0;
   top: 0;
   opacity: 0;
+  z-index: 500;
   pointer-events: none;
   transform: translate(mixins.rem(-4), mixins.rem(-4));
   width: mixins.rem(140);

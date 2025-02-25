@@ -63,7 +63,7 @@ const MainIqPumpWindow = () => {
                 /** отправка уведомления*/
                 const data: { username: string } = { username: responseData?.username };
                 await axios.post('https://stt.market/api/notifications/safety/', data);
-                showAttention(SEND_MSG_TO_TELEGRAM, 'success')
+                // showAttention(SEND_MSG_TO_TELEGRAM, 'success')
             }
             return true
         } catch (err) {
@@ -125,7 +125,7 @@ const MainIqPumpWindow = () => {
 
                 if (responseData.status === 400) {
                     setModalNotifications({isOpen:true, isClosing: false})
-                    showAttention(responseData?.message, 'error')
+                    // showAttention(responseData?.message, 'error')
                 } else if (responseData.status === 200) {
                     setAuthoriedInfo((prev) => ({...prev, telegramValid:responseData?.valid,  telegramCode:responseData?.code}));
                     setModalNotifications({isOpen:true, isClosing: false})

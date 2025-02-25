@@ -40,7 +40,6 @@ const CustomSelect = ({
             <button className={classNameChosenValue}>
                 <img src={LANGUAGES?.find((item) => item.code == chosenValue)?.url} alt={`languge`} className={classNameIcon}/>
             </button>
-            {/*{isOpenMenu && (*/}
                 <ul className={`${classNameBodyList} ${isOpenMenu && classNameShowed}`}>
                     {options &&
                         options?.length > 0 &&
@@ -57,7 +56,6 @@ const CustomSelect = ({
 
                         ))}
                 </ul>
-            {/*)}*/}
         </div>
     );
 };
