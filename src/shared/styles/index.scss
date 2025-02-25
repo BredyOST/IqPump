@@ -24,10 +24,9 @@ body {
     min-height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    //overflow: hidden;
     position: relative;
     z-index: 0;
-
 
     @supports (overflow: clip) {
         overflow: clip;
