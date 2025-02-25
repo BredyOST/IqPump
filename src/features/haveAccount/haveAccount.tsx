@@ -68,83 +68,139 @@ const HaveAccount = ({
     /**Функция отправки токенов*/
 
 
-
-
-
-    async function sendTokens(amount:string) {
-
+    async function sendTokens(amount: string) {
         if (+transferTokens <= 0) {
-            // showAttention(`Please enter tokens for transfer`, 'error');
             return;
         }
         try {
-        setIsLoading((prev ) => ({...prev, isLoad:true, text: 'preparation for the transaction'}))
+            setIsLoading({ isLoad: true, text: 'Preparation for the transaction' });
 
-        const signer = await provider.getSigner();
-        const userAddress = await signer.getAddress();
+            const signer = await provider.getSigner();
+            const userAddress = await signer.getAddress();
 
-        // Контракт токена STT
-        const contractCommon = new ethers.Contract(tokenContractAddress, tokenContractAbi, signer);
-        const contract = new ethers.Contract(sttAffiliateAddress, tokenContractAbiCb31, signer);
+            const contractCommon = new ethers.Contract(tokenContractAddress, tokenContractAbi, signer);
+            const contract = new ethers.Contract(sttAffiliateAddress, tokenContractAbiCb31, signer);
 
-        // Получаем decimals для токена
-        const decimals = await contractCommon.decimals();
-        const tokenAmount = ethers.parseUnits(amount.toString(), parseInt(decimals)); // Преобразуем в нужный формат
+            const decimals = await contractCommon.decimals();
+            const tokenAmount = ethers.parseUnits(amount.toString(), parseInt(decimals));
 
-        // Проверяем allowance (разрешение) перед approve
-        const allowanceBefore = await contractCommon.allowance(userAddress, FUNDING_WALLET_IQ_PUMP);
-        console.log('Allowance before approve:', allowanceBefore.toString());
-        setIsLoading({isLoad:true, text: 'Waiting for approve transaction confirmation'})
+            // Проверяем allowance
+            const allowanceBefore = await contractCommon.allowance(userAddress, FUNDING_WALLET_IQ_PUMP);
+            console.log('Allowance before approve:', allowanceBefore.toString());
 
+            // Если allowance меньше необходимого количества, выполняем approve
+            if (allowanceBefore < tokenAmount) {
+                setIsLoading({ isLoad: true, text: 'Waiting for approve transaction confirmation' });
 
-        // Выполняем approve
-        // const txApprove = await contractCommon.approve(receiver, tokenAmount);
-        const txApprove = await contractCommon.approve(sttAffiliateAddress, tokenAmount);
+                const txApprove = await contractCommon.approve(sttAffiliateAddress, tokenAmount);
+                console.log('Approve transaction sent:', txApprove.hash);
 
-        console.log('Approve transaction sent:', txApprove.hash);
-        const receiptApprove = await txApprove.wait();
-        console.log('Approve transaction confirmed:', receiptApprove);
+                await txApprove.wait();
+                console.log('Approve transaction confirmed');
+            } else {
+                console.log('Approve not required, allowance is sufficient');
+            }
 
-        setIsLoading((prev) => ({...prev, isLoad:true, text: 'Approve transaction confirmed:'}))
+            setIsLoading({ isLoad: true, text: 'Preparing token transfer' });
 
-        // Проверяем allowance после approve
-        const allowanceAfter = await contractCommon.allowance(userAddress, FUNDING_WALLET_IQ_PUMP);
-        console.log('Allowance after approve:', allowanceAfter.toString());
-
-        // Проверяем баланс подписанта
-        const balance = await contractCommon.balanceOf(userAddress);
-        console.log('Balance:', balance.toString());
-
-        // Выполняем перевод токенов
-
-
-            setIsLoading({isLoad:true, text: 'Preparing token transfer'})
-
-            const tx = await contract.paymentToTheShop(FUNDING_WALLET_IQ_PUMP, tokenAmount); // Используем transfer для перевода токенов
+            // Выполняем перевод токенов
+            const tx = await contract.paymentToTheShop(FUNDING_WALLET_IQ_PUMP, tokenAmount);
             console.log('Transaction sent:', tx?.hash);
-            // showAttention(`Transaction sent`, 'success');
 
-            setIsLoading((prev) => ({...prev, isLoad:true, text: 'Transaction sent'}))
+            setIsLoading({ isLoad: true, text: 'Transaction sent' });
 
-            const receipt = await tx.wait();
-            console.log('Transaction confirmed:', receipt);
+            await tx.wait();
+            console.log('Transaction confirmed');
 
-            setIsLoading((prev) => ({...prev, isLoad:true, text: 'Transaction confirmed'}))
+            setIsLoading({ isLoad: true, text: 'Transaction confirmed' });
             setTransferTokens('0');
-
-            setTransactionSuccess(prev => !prev)
+            setTransactionSuccess(prev => !prev);
 
         } catch (error) {
-            // showAttention(`Error sending tokens`, 'error');
             console.error('Error sending tokens:', error);
-            showAttention(`Error sending tokens:`, 'error');
-            setIsLoading({isLoad:false, text: ''})
+            showAttention(`Error sending tokens`, 'error');
+            setIsLoading({ isLoad: false, text: '' });
         } finally {
-            // dispatch(addSuccessTransferToken(!successTransferTokens));
-            // dispatch(addLoader(false));
-            setIsLoading({isLoad:false, text: ''})
+            setIsLoading({ isLoad: false, text: '' });
         }
     }
+
+
+
+    // async function sendTokens(amount:string) {
+    //
+    //     if (+transferTokens <= 0) {
+    //         // showAttention(`Please enter tokens for transfer`, 'error');
+    //         return;
+    //     }
+    //     try {
+    //     setIsLoading((prev ) => ({...prev, isLoad:true, text: 'preparation for the transaction'}))
+    //
+    //     const signer = await provider.getSigner();
+    //     const userAddress = await signer.getAddress();
+    //
+    //     // Контракт токена STT
+    //     const contractCommon = new ethers.Contract(tokenContractAddress, tokenContractAbi, signer);
+    //     const contract = new ethers.Contract(sttAffiliateAddress, tokenContractAbiCb31, signer);
+    //
+    //     // Получаем decimals для токена
+    //     const decimals = await contractCommon.decimals();
+    //     const tokenAmount = ethers.parseUnits(amount.toString(), parseInt(decimals)); // Преобразуем в нужный формат
+    //
+    //     // Проверяем allowance (разрешение) перед approve
+    //     const allowanceBefore = await contractCommon.allowance(userAddress, FUNDING_WALLET_IQ_PUMP);
+    //     console.log('Allowance before approve:', allowanceBefore.toString());
+    //     setIsLoading({isLoad:true, text: 'Waiting for approve transaction confirmation'})
+    //
+    //
+    //     // Выполняем approve
+    //     // const txApprove = await contractCommon.approve(receiver, tokenAmount);
+    //     const txApprove = await contractCommon.approve(sttAffiliateAddress, tokenAmount);
+    //
+    //     console.log('Approve transaction sent:', txApprove.hash);
+    //     const receiptApprove = await txApprove.wait();
+    //     console.log('Approve transaction confirmed:', receiptApprove);
+    //
+    //     setIsLoading((prev) => ({...prev, isLoad:true, text: 'Approve transaction confirmed:'}))
+    //
+    //     // Проверяем allowance после approve
+    //     const allowanceAfter = await contractCommon.allowance(userAddress, FUNDING_WALLET_IQ_PUMP);
+    //     console.log('Allowance after approve:', allowanceAfter.toString());
+    //
+    //     // Проверяем баланс подписанта
+    //     const balance = await contractCommon.balanceOf(userAddress);
+    //     console.log('Balance:', balance.toString());
+    //
+    //     // Выполняем перевод токенов
+    //
+    //
+    //         setIsLoading({isLoad:true, text: 'Preparing token transfer'})
+    //
+    //         const tx = await contract.paymentToTheShop(FUNDING_WALLET_IQ_PUMP, tokenAmount); // Используем transfer для перевода токенов
+    //         console.log('Transaction sent:', tx?.hash);
+    //         // showAttention(`Transaction sent`, 'success');
+    //
+    //         setIsLoading((prev) => ({...prev, isLoad:true, text: 'Transaction sent'}))
+    //
+    //         const receipt = await tx.wait();
+    //         console.log('Transaction confirmed:', receipt);
+    //
+    //         setIsLoading((prev) => ({...prev, isLoad:true, text: 'Transaction confirmed'}))
+    //         setTransferTokens('0');
+    //
+    //         setTransactionSuccess(prev => !prev)
+    //
+    //     } catch (error) {
+    //         // showAttention(`Error sending tokens`, 'error');
+    //         console.error('Error sending tokens:', error);
+    //         showAttention(`Error sending tokens:`, 'error');
+    //         setIsLoading({isLoad:false, text: ''})
+    //     } finally {
+    //         // dispatch(addSuccessTransferToken(!successTransferTokens));
+    //         // dispatch(addLoader(false));
+    //         setIsLoading({isLoad:false, text: ''})
+    //     }
+    // }
 
     const formatNumber = (num:number):string => {
         return num.toLocaleString('en-US', { minimumFractionDigits: 0 });
