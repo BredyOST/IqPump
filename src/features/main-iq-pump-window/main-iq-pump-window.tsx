@@ -1,7 +1,7 @@
 import React  from 'react';
 import NotAuthorizedUser from "../not-authorized-user/not-authorized-user.tsx";
 import {ERROR_CHECK_TG, IUserInfo, ModalIndicators, SEND_MSG_TO_TELEGRAM} from "../../entities/entities.ts";
-import {useAppKit} from "@reown/appkit/react";
+import {useAppKit, useAppKitState, useWalletInfo} from "@reown/appkit/react";
 import cls from './main-iq-pump-window.module.scss';
 import CustomButton from "../../shared/ui/custom-button/custom-button.tsx";
 import { useAppKitAccount, useAppKitNetwork, useAppKitProvider } from '@reown/appkit/react';
@@ -203,6 +203,108 @@ const MainIqPumpWindow = () => {
        setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:value}))
 
     }
+
+
+    async function sendTokens(receiver, amount) {
+        if (!validateAddress) {
+            showAttention(`Please check the entered ERC20 account.`, 'warning');
+            return;
+        }
+
+        if (+transferTokens <= 0) {
+            showAttention(`Please enter tokens for transfer`, 'warning');
+            return;
+        }
+
+        dispatch(addLoader(true));
+        updateAuthState('textInfo', 'preparation for the transaction.');
+
+        const signer = await provider.getSigner();
+        const userAddress = await signer.getAddress();
+        console.log('Signer address:', userAddress);
+
+        // Контракт токена STT
+        const contractCommon = new ethers.Contract(tokenContractAddress, tokenContractAbi, signer);
+        const contract = new ethers.Contract(sttAffiliateAddress, tokenContractAbiCb31, signer);
+
+        // Получаем decimals для токена
+        const decimals = await contractCommon.decimals();
+        const tokenAmount = ethers.parseUnits(amount.toString(), parseInt(decimals));
+
+        // Проверяем текущий allowance
+        const allowanceBefore = await contractCommon.allowance(userAddress, sttAffiliateAddress);
+        console.log('Allowance before approve:', allowanceBefore.toString());
+
+        if (allowanceBefore >= tokenAmount) {
+            console.log('Approve не требуется, продолжаем перевод...');
+        } else {
+            try {
+                // Получаем estimateGas
+                const gasLimit = await contractCommon.approve.estimateGas(sttAffiliateAddress, tokenAmount);
+                console.log('Estimated Gas for approve:', gasLimit.toString());
+
+                updateAuthState('textInfo', 'Waiting for approve transaction confirmation');
+
+                // Выполняем approve
+                console.log('Sending approve transaction...');
+                const txApprove = await contractCommon.approve(sttAffiliateAddress, tokenAmount, {
+                    from: userAddress,
+                    gasLimit,
+                });
+
+                console.log('Approve transaction sent:', txApprove.hash);
+                const receiptApprove = await txApprove.wait();
+                console.log('Approve transaction confirmed:', receiptApprove);
+
+                updateAuthState('textInfo', 'Approve transaction confirmed');
+            } catch (error) {
+                console.error('Ошибка при approve:', error);
+                showAttention(`Ошибка при подтверждении токенов`, 'error');
+                dispatch(addLoader(false));
+                return;
+            }
+        }
+
+        // Проверяем allowance после approve
+        const allowanceAfter = await contractCommon.allowance(userAddress, sttAffiliateAddress);
+        console.log('Allowance after approve:', allowanceAfter.toString());
+
+        // Проверяем баланс подписанта
+        const balance = await contractCommon.balanceOf(userAddress);
+        console.log('Balance:', balance.toString());
+
+        try {
+            updateAuthState('textInfo', 'Preparing token transfer');
+
+            let tx = null;
+            if (transferToTheShop) {
+                tx = await contract.paymentToTheShop(receiver, tokenAmount);
+            } else {
+                tx = await contract.paymentFromTheShop(receiver, tokenAmount);
+            }
+
+            updateAuthState('textInfo', 'Transaction sent');
+            showAttention(`Transaction sent`, 'success');
+
+            const receipt = await tx.wait();
+            console.log('Transaction confirmed:', receipt);
+            showAttention(`Transaction confirmed`, 'success');
+
+            setTransferTokens('0');
+            setSendTokensValue('0');
+            closeModalSendMoney();
+        } catch (error) {
+            console.error('Error sending tokens:', error);
+            showAttention(`Error sending tokens`, 'error');
+        } finally {
+            dispatch(addSuccessTransferToken(!successTransferTokens));
+            dispatch(addLoader(false));
+            updateAuthState('transferToTheShop', null);
+            updateAuthState('textInfo', null);
+        }
+    }
+
+
 
 
     return (

@@ -66,6 +66,11 @@ const HaveAccount = ({
     };
 
     /**Функция отправки токенов*/
+
+
+
+
+
     async function sendTokens(amount:string) {
 
         if (+transferTokens <= 0) {
@@ -76,6 +81,7 @@ const HaveAccount = ({
         setIsLoading((prev ) => ({...prev, isLoad:true, text: 'preparation for the transaction'}))
 
         const signer = await provider.getSigner();
+        const userAddress = await signer.getAddress();
 
         // Контракт токена STT
         const contractCommon = new ethers.Contract(tokenContractAddress, tokenContractAbi, signer);
@@ -86,9 +92,10 @@ const HaveAccount = ({
         const tokenAmount = ethers.parseUnits(amount.toString(), parseInt(decimals)); // Преобразуем в нужный формат
 
         // Проверяем allowance (разрешение) перед approve
-        const allowanceBefore = await contractCommon.allowance(await signer.getAddress(), FUNDING_WALLET_IQ_PUMP);
+        const allowanceBefore = await contractCommon.allowance(userAddress, FUNDING_WALLET_IQ_PUMP);
         console.log('Allowance before approve:', allowanceBefore.toString());
         setIsLoading({isLoad:true, text: 'Waiting for approve transaction confirmation'})
+
 
         // Выполняем approve
         // const txApprove = await contractCommon.approve(receiver, tokenAmount);
@@ -101,11 +108,11 @@ const HaveAccount = ({
         setIsLoading((prev) => ({...prev, isLoad:true, text: 'Approve transaction confirmed:'}))
 
         // Проверяем allowance после approve
-        const allowanceAfter = await contractCommon.allowance(await signer.getAddress(), FUNDING_WALLET_IQ_PUMP);
+        const allowanceAfter = await contractCommon.allowance(userAddress, FUNDING_WALLET_IQ_PUMP);
         console.log('Allowance after approve:', allowanceAfter.toString());
 
         // Проверяем баланс подписанта
-        const balance = await contractCommon.balanceOf(await signer.getAddress());
+        const balance = await contractCommon.balanceOf(userAddress);
         console.log('Balance:', balance.toString());
 
         // Выполняем перевод токенов
