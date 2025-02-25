@@ -1,0 +1,178 @@
+@use '../../../shared/styles/variable/globalIndex';
+@use '../../../shared/styles/variable/global';
+@use '../../../shared/styles/mixins';
+@use '../../../shared/styles/variable/common';
+
+.wrapper {
+    padding-left: mixins.rem(30);
+    padding-right: mixins.rem(30);
+    padding-bottom: mixins.rem(30);
+    display: flex;
+    flex-direction: column;
+    width: mixins.rem(371);
+    row-gap: mixins.rem(30);
+}
+
+.stt_modal_header {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    row-gap: mixins.rem(34);
+    align-items: center;
+}
+
+.notification_header {
+    font-family: globalIndex.$font_family_main;
+    background-color: #8ffba3;
+    width: mixins.rem(207);
+    height: mixins.rem(56);
+    color: #409798;
+    font-weight: 900;
+    border-bottom-left-radius: mixins.rem(25);
+    border-bottom-right-radius: mixins.rem(20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover {
+    display: flex;
+    flex-direction: column;
+    row-gap: mixins.rem(34);
+    align-items: center;
+    flex: 1 1 100%;
+    min-width: 100%;
+}
+
+.cover_text_block {
+    display: flex;
+    flex-direction: column;
+    row-gap: mixins.rem(30);
+    text-align: center;
+}
+
+.cover_head,
+.cover_body,
+.cover_footer {
+    justify-content: center;
+    align-items: center;
+    font-family: globalIndex.$font_family_main;
+    font-size: mixins.rem(14);
+    font-weight: 500;
+    text-align: center;
+    line-height: globalIndex.$line_height;
+    flex: 1 1 100%;
+    min-width: 100%;
+}
+
+.code {
+    font-family: globalIndex.$font_family_main;
+    font-size: mixins.rem(24);
+    font-weight: 700;
+    color: #409798;
+    background-color: #d3fdde;
+    padding-top: mixins.rem(14);
+    padding-bottom: mixins.rem(14);
+    min-width: mixins.rem(232);
+    border-radius: mixins.rem(15);
+    margin-top: mixins.rem(34);
+}
+
+.linkCover,
+.cover_body_userName {
+    font-family: globalIndex.$font_family_main;
+    color: #409798;
+    font-weight: 600;
+    font-size: mixins.rem(24);
+}
+
+.cover_body {
+}
+
+.cover_body,
+.cover_head,
+.cover_footer {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    background-color: globalIndex.$btn_background;
+    color: globalIndex.$btn_color;
+    border: none;
+    cursor: pointer;
+    box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
+    transition:
+            background-color ease 0.3s,
+            box-shadow ease 0.3s;
+
+    @media (any-hover: hover) {
+        &:hover {
+            background-color: darken(globalIndex.$btn_background_hover, 10%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition:
+                    background-color ease 0.3s,
+                    box-shadow ease 0.3s;
+        }
+    }
+    padding-left: mixins.rem(28);
+    padding-right: mixins.rem(28);
+    padding-top: mixins.rem(14);
+    padding-bottom: mixins.rem(14);
+    font-size: mixins.rem(16);
+    font-weight: 700;
+    font-family: globalIndex.$font_family_btn_first;
+    border-radius: mixins.rem(30);
+    min-width: mixins.rem(137);
+    min-height: mixins.rem(54);
+}
+
+.wrapper_btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(mixins.rem(20), mixins.rem(12));
+    @include mixins.adaptiveValueTransformSeparate('transform', 20, -10, 12, 12, 3, 380, 320);
+}
+
+.svgSafety {
+    width: mixins.rem(30);
+    height: mixins.rem(30);
+    flex: 0 0 mixins.rem(30);
+}
+
+.close_btn {
+    //@extend .close_svg;
+    position: relative;
+    width: mixins.rem(24);
+    height:  mixins.rem(24);
+    cursor: pointer;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: mixins.rem(4);
+        background-color: black;
+        border-radius: mixins.rem(15);
+        transition: 0.3s;
+    }
+
+    &:before {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &:after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+}
+
+
+.close-btn:hover::before,
+.close-btn:hover::after {
+    background-color: red;
+}

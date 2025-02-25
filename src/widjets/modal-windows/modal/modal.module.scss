@@ -1,0 +1,443 @@
+@use '../../shared/styles/variable/globalIndex';
+@use '../../shared/styles/variable/global';
+@use '../../shared/styles/mixins';
+@use '../../shared/styles/variable/common';
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.94);
+    z-index: 100;
+    opacity: 0;
+    transition: opacity ease 0.3s 0s;
+    &.open {
+        opacity: 1;
+        transition: opacity ease 0.3s 0s;
+    }
+}
+.swiper {
+    min-height: 100%;
+}
+
+.body {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+.item_video_cover {
+    @media (min-width: mixins.em(global.$mobile)) {
+        position: relative;
+        display: flex;
+        width: auto;
+        max-width: 100%;
+        justify-content: center;
+        margin: 0 auto;
+        align-items: center;
+        height: 98%;
+        aspect-ratio: 9 / 16;
+    }
+
+    @media (max-width: mixins.em(global.$mobile)) {
+        position: relative;
+        display: flex;
+        width: auto;
+        max-width: 100%;
+        justify-content: center;
+        margin: 0 auto;
+        align-items: center;
+        height: 98%;
+        aspect-ratio: 9 / 16;
+    }
+}
+
+.item_video {
+    @media (min-width: mixins.em(global.$mobile)) {
+        height: 98%;
+        max-width: 100%;
+        position: relative;
+        width: auto;
+        aspect-ratio: 9 / 16;
+    }
+
+    @media (max-width: mixins.em(global.$mobile)) {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.video {
+    height: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: contain;
+    border-radius: mixins.rem(10);
+    position: relative;
+    @media (max-width: mixins.em(global.$mobile)) {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: mixins.rem(10);
+    }
+}
+
+.progressBarContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: mixins.rem(8);
+    background: rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: mixins.rem(10);
+}
+
+.progressBar {
+    height: 100%;
+    background: #bc1616;
+    transition: width 0.2s ease-in-out;
+    border-radius: mixins.rem(10);
+}
+
+.wrapper_btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-50%, 50%);
+    cursor: pointer;
+    z-index: 101;
+
+    @media (max-width: mixins.em(global.$mobile)) {
+        display: none;
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+.close_svg {
+    @extend .close_svg;
+}
+
+.basic {
+    display: flex;
+    flex-direction: column;
+    row-gap: mixins.rem(20);
+    min-width: 100%;
+    justify-content: center;
+    align-items: center;
+
+    &.show {
+        transition: opacity ease 0.3s 0s;
+    }
+
+    &.hide {
+        height: 0;
+        opacity: 0;
+        transition: opacity ease 0.3s 0s;
+        visibility: hidden;
+    }
+}
+
+.btn_cover_block {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: mixins.rem(15);
+    z-index: 100;
+    width: mixins.rem(80);
+    min-height: 100%;
+    justify-content: flex-end;
+    align-items: center;
+
+    @media (min-width: mixins.em(global.$mobile)) {
+        transform: translateX(mixins.rem(80));
+        padding-bottom: mixins.rem(60);
+    }
+
+    @media (max-width: mixins.em(global.$mobile)) {
+        padding-bottom: mixins.rem(35);
+    }
+}
+
+.wrapperSvg {
+    color: #ffffff;
+    display: flex;
+    position: relative;
+}
+
+.line_soud {
+    position: absolute;
+    width: mixins.rem(40);
+    height: mixins.rem(2);
+    background-color: #ffffff;
+    right: mixins.rem(-50);
+    top: 50%;
+}
+
+.svg {
+    fill: rgb(255, 255, 255);
+    display: block;
+
+    @media (min-width: mixins.em(global.$mobile)) {
+        opacity: 0.5;
+    }
+    @media (max-width: mixins.em(global.$mobile)) {
+        opacity: 0.6;
+    }
+
+    @media (any-hover: hover) {
+        &:hover {
+            fill: #43e404;
+        }
+    }
+
+    &.sizeChain {
+        @media (min-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(40);
+            height: mixins.rem(36);
+        }
+        @media (max-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(40);
+            height: mixins.rem(36);
+        }
+    }
+    &.sizePayment {
+        @media (min-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(39);
+            height: mixins.rem(39);
+        }
+        @media (max-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(39);
+            height: mixins.rem(39);
+        }
+    }
+    &.sizeSound {
+        @media (min-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(36);
+            height: mixins.rem(32);
+        }
+        @media (max-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(36);
+            height: mixins.rem(32);
+        }
+    }
+    &.sizeLink {
+        @media (min-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(35);
+            height: mixins.rem(31);
+        }
+        @media (max-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(35);
+            height: mixins.rem(31);
+        }
+    }
+    &.sizeFavourite {
+        @media (min-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(35);
+            height: mixins.rem(34);
+        }
+        @media (max-width: mixins.em(global.$mobile)) {
+            width: mixins.rem(35);
+            height: mixins.rem(34);
+        }
+    }
+}
+
+.followers {
+    color: rgba(255, 255, 255, 0.5);
+    font-family: globalIndex.$font_family_main;
+    line-height: globalIndex.$line_height;
+    font-size: mixins.rem(14);
+    opacity: 50%;
+}
+.followers_wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: mixins.rem(10);
+    align-items: center;
+}
+
+.expand_icon_hide {
+    width: mixins.rem(33);
+    height: mixins.rem(33);
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: mixins.rem(2) solid #ffffff;
+    opacity: 0.5;
+
+    @media (any-hover: hover) {
+        &:hover {
+            border: mixins.rem(2) solid #43e404;
+        }
+    }
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: mixins.rem(8);
+        height: mixins.rem(8);
+        border: mixins.rem(2) solid white;
+        opacity: 0.5;
+        @media (any-hover: hover) {
+            &:hover {
+                fill: #43e404;
+            }
+        }
+    }
+
+    &::before {
+        border-bottom: none;
+        border-right: none;
+        top: mixins.rem(7);
+        left: mixins.rem(7);
+    }
+
+    &::after {
+        border-top: none;
+        border-left: none;
+        bottom: mixins.rem(7);
+        right: mixins.rem(7);
+    }
+}
+
+.expand_icon_show {
+    width: mixins.rem(33);
+    height: mixins.rem(33);
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: mixins.rem(2) solid #ffffff;
+
+    @media (any-hover: hover) {
+        &:hover {
+            border: mixins.rem(2) solid #43e404;
+        }
+    }
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: mixins.rem(8);
+        height: mixins.rem(8);
+        border: mixins.rem(2) solid white;
+        @media (any-hover: hover) {
+            &:hover {
+                border-color: #43e404;
+            }
+        }
+    }
+
+    &::before {
+        border-top: none;
+        border-left: none;
+        top: 46%; // Смещаем к центру
+        left: 46%;
+        transform: translate(-100%, -100%) rotate(0deg);
+    }
+
+    &::after {
+        border-bottom: none;
+        border-right: none;
+        top: 55%;
+        left: 55%;
+        transform: translate(0, 0) rotate(0deg); // Аналогично, но с другим смещением
+    }
+}
+
+.cover_btn_followers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: mixins.rem(5);
+    justify-content: center;
+    min-width: 100%;
+}
+
+// slider
+
+.wrapper {
+    width: mixins.rem(60);
+    position: absolute;
+    right: mixins.rem(-70);
+    transform: translate(0%, -100%);
+    top: 50%;
+    text-align: center;
+    height: mixins.rem(2);
+    border-radius: mixins.rem(15);
+    align-items: center;
+}
+
+.coverLine,
+.line {
+    border-radius: mixins.rem(35);
+    position: absolute;
+    min-height: 100%;
+}
+
+.coverLine {
+    width: 100%;
+    background-color: globalIndex.$background_colour_additional_accent_second;
+    height: mixins.rem(6);
+    overflow: hidden;
+}
+
+.line {
+    height: 100%;
+    background: #409798;
+    transition: width ease 0.3s 0s;
+}
+
+.input {
+    height: mixins.rem(6);
+    width: 100%;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    opacity: 0;
+    border-radius: mixins.rem(15);
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 120%;
+        background-color: #ccc;
+        transform: translateY(-45%);
+        z-index: -1;
+        border-radius: mixins.rem(15);
+    }
+}
+
+.coverValue {
+    margin-top: mixins.rem(5);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    color: globalIndex.$color_title;
+
+    span {
+        font-weight: bold;
+    }
+}
