@@ -1,8 +1,12 @@
-import { createAppKit } from '@reown/appkit/react';
+import {createAppKit } from '@reown/appkit/react';
 import {EthersAdapter} from "@reown/appkit-adapter-ethers";
 import { arbitrum, } from '@reown/appkit/networks'
 
-const projectId = process.env.REACT_APP_APP_KIT_ID;
+import MainIqPumpWindow from "./features/main-iq-pump-window/main-iq-pump-window.tsx";
+
+const projectId = process.env.REACT_APP_APP_KIT_ID || 'as';
+export const FUNDING_WALLET_IQ_PUMP = process.env.REACT_APP_FUNDING_WALLET_ERC;
+
 
 if (!projectId) {
   throw new Error('REACT_APP_APP_KIT_ID is not defined in the environment variables');
@@ -10,10 +14,10 @@ if (!projectId) {
 
 // 3. Create a metadata object
 const metadata = {
-  name: 'My Website',
-  description: 'My Website description',
-  url: 'https://mywebsite.com', // origin must match your domain & subdomain
-  icons: ['https://avatars.mywebsite.com/'],
+  name: 'iq Pump',
+  description: 'iq pump',
+  url: 'https://',
+  icons: ['https://'],
 };
 
 // 4. Create a AppKit instance
@@ -35,17 +39,10 @@ createAppKit({
 
 function App() {
 
-
-
-
-
-
-
-
   return (
-    <>
-
-    </>
+      <div>
+        <MainIqPumpWindow />
+      </div>
   )
 }
 
