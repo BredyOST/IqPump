@@ -25,10 +25,17 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
     //padding-bottom: mixins.rem(100);
     //background: linear-gradient(130deg, #f7e4e3 0%, #fcf9e2 38%, #ffecec 75%, #f6e0ff 100%);
     z-index: 0;
-    padding-top: env(safe-area-inset-top, 0);
+    //padding-top: env(safe-area-inset-top, 0);
+
+    @media (max-width: 767.98px) {
+        .wrapper {
+            margin-top: env(safe-area-inset-top, 0);
+        }
+    }
 
     @supports (overflow: clip) {
         overflow: clip;
