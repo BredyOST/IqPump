@@ -43,12 +43,12 @@ const MainIqPumpWindow = () => {
     const { t } = useTranslation();
 
     /** appkit*/
-    const { address, isConnected, caipAddress, status, embeddedWalletInfo} = useAppKitAccount();
+    const {  isConnected} = useAppKitAccount();
     const { walletProvider } = useAppKitProvider('eip155');
-    const { caipNetwork, caipNetworkId, chainId, switchNetwork } = useAppKitNetwork();
-    const {  open, close } = useAppKit();
+    const { chainId, switchNetwork } = useAppKitNetwork();
+    const {  open,  } = useAppKit();
 
-    const { open:openTwo, selectedNetworkId } = useAppKitState()
+    const { open:openTwo } = useAppKitState()
 
 
 
@@ -96,7 +96,7 @@ const MainIqPumpWindow = () => {
     /** авторизация через кошелек*/
     async function connectAccount(): Promise<void> {
         try {
-            const res = await open();
+            await open();
         } catch (error) {
             console.log('Error handle loginThunk', error);
         }
