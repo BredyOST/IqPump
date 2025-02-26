@@ -37,7 +37,7 @@ const NotAuthorizedUser = ({
     return (
         <div className={cls.wrapper}>
             <div className={cls.title_cover}>
-                <img src="./../../../public/svg/brain.svg" className={cls.icon} alt="icons"/>
+                <img src="./svg/brain.svg" className={cls.icon} alt="icons"/>
                 <h3 className={cls.title}>IQ PUMP</h3>
             </div>
             <div className={cls.cover}>

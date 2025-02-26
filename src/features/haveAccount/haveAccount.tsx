@@ -212,7 +212,7 @@ const HaveAccount = ({
         <div className={cls.wrapper}>
             <div className={cls.title_cover}>
                 <h3 className={cls.title}>IQ PUMP</h3>
-                <img src="./../../../public/svg/brain.svg" className={cls.icon} alt="icons"/>
+                <img src="./svg/brain.svg" className={cls.icon} alt="icons"/>
                 <div className={cls.th_info}>
                     <div className={cls.user_name_tg}>{telegramUsername}</div>
                     <div className={cls.adress}>{`${wallet?.slice(0, 10)}...${wallet?.slice(35)}`}</div>

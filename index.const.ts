@@ -480,6 +480,6 @@ export const tokenContractAbiCb31 = [
 
 
 export const LANGUAGES:LANGUGES_TYPE[] = [
-    { code: "en", label: "English", url:'./src/assets/png/en.png' },
-    { code: "ru", label: "Русский", url:'./src/assets/png/ru.png' },
+    { code: "en", label: "English", url:'./png/en.png' },
+    { code: "ru", label: "Русский", url:'./png/ru.png' },
 ];
