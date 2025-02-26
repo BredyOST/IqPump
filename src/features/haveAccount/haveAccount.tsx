@@ -26,7 +26,6 @@ export interface IHaveAccountProps{
     test:(arg:boolean) => void;
 }
 
-
 const HaveAccount = ({
                     telegramUsername,
                     balanceStt,

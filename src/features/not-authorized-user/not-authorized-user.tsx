@@ -33,7 +33,6 @@ const NotAuthorizedUser = ({
         );
     }, [loggedIn, telegramUsername, hasAccountIpPump,i18n.language]);
 
-
     return (
         <div className={cls.wrapper}>
             <div className={cls.title_cover}>
