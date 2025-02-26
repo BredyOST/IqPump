@@ -1,7 +1,7 @@
 import React  from 'react';
 import NotAuthorizedUser from "../not-authorized-user/not-authorized-user.tsx";
 import {ERROR_CHECK_TG, IUserInfo, ModalIndicators} from "../../entities/entities.ts";
-import {useAppKit} from "@reown/appkit/react";
+import {useAppKit, useAppKitState} from "@reown/appkit/react";
 import cls from './main-iq-pump-window.module.scss';
 import CustomButton from "../../shared/ui/custom-button/custom-button.tsx";
 import { useAppKitAccount, useAppKitNetwork, useAppKitProvider } from '@reown/appkit/react';
@@ -43,10 +43,14 @@ const MainIqPumpWindow = () => {
     const { t } = useTranslation();
 
     /** appkit*/
-    const { isConnected} = useAppKitAccount();
+    const { address, isConnected, caipAddress, status, embeddedWalletInfo} = useAppKitAccount();
     const { walletProvider } = useAppKitProvider('eip155');
-    const { chainId, switchNetwork,  } = useAppKitNetwork();
-    const { open } = useAppKit();
+    const { caipNetwork, caipNetworkId, chainId, switchNetwork } = useAppKitNetwork();
+    const {  open, close } = useAppKit();
+
+    const { open:openTwo, selectedNetworkId } = useAppKitState()
+
+
 
     /** проверка подключения уведомлений и отправка сообщения в тг о входе в аккаунт*/
     async function checkNotifications(): Promise<boolean> {
@@ -93,7 +97,6 @@ const MainIqPumpWindow = () => {
     async function connectAccount(): Promise<void> {
         try {
             const res = await open();
-            console.log(res)
         } catch (error) {
             console.log('Error handle loginThunk', error);
         }
@@ -202,6 +205,10 @@ const MainIqPumpWindow = () => {
     const change:(arg:boolean) => void = (value) => {
        setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:value}))
     }
+
+    React.useEffect(() => {
+        console.log(openTwo)
+    },[openTwo])
 
     return (
         <div className={cls.overlay}>

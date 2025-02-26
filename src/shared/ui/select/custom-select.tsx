@@ -44,7 +44,7 @@ const CustomSelect = ({
                     {options &&
                         options?.length > 0 &&
                         options?.map((option) => (
-                            <div onClick={() => onSelect(option.code)} className={classNameBlockList}>
+                            <div key={option?.code} onClick={() => onSelect(option.code)} className={classNameBlockList}>
                                 <img className={classNameIcon} src={option?.url} alt={`languge`}/>
                                 <li
                                     className={classNameOption}
