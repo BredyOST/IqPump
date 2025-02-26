@@ -201,9 +201,7 @@ const MainIqPumpWindow = () => {
     /** для теста*/
     const change:(arg:boolean) => void = (value) => {
        setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:value}))
-
     }
-
 
     return (
         <div className={cls.overlay}>
