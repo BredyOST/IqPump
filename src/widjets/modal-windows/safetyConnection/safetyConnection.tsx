@@ -1,34 +1,27 @@
 import cls from './safetyConnection.module.scss';
-import {IUserInfo} from "../../../entities/entities.ts";
 import CustomButton from "../../../shared/ui/custom-button/custom-button.tsx";
 import {useTranslation} from "react-i18next";
+import {userStore} from "../../../shared/mobX/store/userStore.ts";
+import {modalStatesStore} from "../../../shared/mobX/store/modalStatesStore.ts";
+import {observer} from "mobx-react-lite";
 
-interface ISafetyConnection {
-    state: IUserInfo
-    setModalSafetyConnection: (arg: {isOpen:boolean, isClosing: boolean}) => void
-    isLoadingHandler:(arg:{isLoad: boolean,  text: string}) => void
-}
-
-const SafetyConnection = ({
-                            state,
-                            setModalSafetyConnection,
-                          }:ISafetyConnection) => {
+const SafetyConnection = observer(() => {
 
     const { t } = useTranslation();
+    const {wallet, telegramUsername } = userStore.user;
 
     /**Functions*/
     /** для закрытия модального окна*/
     const closeModalSafetyConnection = () => {
-        setModalSafetyConnection({isOpen:false, isClosing: true})
+        modalStatesStore.setState('modalCheckSafetyConnection', {isOpen:false, isClosing: true})
     };
-
 
     return (
         <>
             <div className={cls.wallet_header_telegram}>
                 <div className={cls.wrapper}>
                     <div className={cls.stt_modal_header}>
-                        {!state?.wallet && state?.telegramUsername !== '' ? (
+                        {!wallet && telegramUsername !== '' ? (
                             <>
                                 <div className={cls.notification_header}>SAFETY</div>
                                 <CustomButton
@@ -46,7 +39,7 @@ const SafetyConnection = ({
                                 <div className={cls.cover_body}>
                                     <div>{t('safety')}</div>
                                     <div>{t('safetyNext')}</div>
-                                    <div className={cls.userName}>{state?.telegramUsername}</div>
+                                    <div className={cls.userName}>{telegramUsername}</div>
                                     <div>{t('notRecieved')}</div>
                                 </div>
                                 <CustomButton onClick={closeModalSafetyConnection} classNameBtn={cls.btn} type='button'>
@@ -88,6 +81,6 @@ const SafetyConnection = ({
             </div>
         </>
     );
-};
+})
 
 export default SafetyConnection;

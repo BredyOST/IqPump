@@ -369,11 +369,13 @@
     font-weight: 700;
     border-radius: mixins.rem(40);
     min-width: mixins.rem(137);
+    background-color: #fff3;
 
     &.acess {
         background-color: #39e476;
         box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
         color: #2F164B;
+        opacity: 1;
     }
 
     @media (any-hover: hover) {
@@ -404,6 +406,7 @@
     font-weight: 700;
     border-radius: mixins.rem(40);
     min-width: mixins.rem(137);
+    background-color: #fff3;
 
     @media (any-hover: hover) {
         &:hover {

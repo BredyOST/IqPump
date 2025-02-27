@@ -1,16 +1,12 @@
 import cls from './styled/loader.module.scss';
+import {observer} from "mobx-react-lite";
+import {isLoadingStore} from "../../shared/mobX/store/isLoadingStore.ts";
 
-interface ILoaderProps {
-    isLoading: boolean;
-    text?:string
-}
+const Loader = observer(() => {
 
-const Loader = ({
-                    isLoading,
-                    text
-}: ILoaderProps) => {
+    const {isLoad, text} = isLoadingStore.loading
 
-    if (!isLoading) return null;
+    if (!isLoad) return null;
 
     return (
         <div className={`${cls.loaderWrapper} ${text && cls.backgraund}`}>
@@ -18,6 +14,6 @@ const Loader = ({
             <div className={cls.loadingText}>{text}</div>
         </div>
     );
-};
+});
 
 export default Loader;

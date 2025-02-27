@@ -12,36 +12,35 @@ import {
 } from "../../../index.const.ts";
 import {useTranslation} from "react-i18next";
 import {showAttention} from "../../shared/tostify/attention.ts";
+import {userStore} from "../../shared/mobX/store/userStore.ts";
+import {observer} from "mobx-react-lite";
+import {isLoadingStore} from "../../shared/mobX/store/isLoadingStore.ts";
+import {modalStatesStore} from "../../shared/mobX/store/modalStatesStore.ts";
+import Modal from "../../shared/ui/modal/modal.tsx";
+import Portal from "../../shared/ui/portal/portal.tsx";
+import WithdrawalAccess from "../../widjets/modal-windows/withdrawalAccess/withdrawalAccess.tsx";
 
 export interface IHaveAccountProps{
-    telegramUsername:string
-    loggedIn: boolean
-    hasAccountIpPump: boolean
-    balanceStt:string
-    wallet:string
-    provider : any
-    setIsLoading: React.Dispatch<React.SetStateAction<{ isLoad: boolean; text: string }>>;
     isloadingCheckBalance:boolean;
     setTransactionSuccess: React.Dispatch<React.SetStateAction<boolean>>;
     test:(arg:boolean) => void;
 }
 
-const HaveAccount = ({
-                    telegramUsername,
-                    balanceStt,
+const HaveAccount = observer(({
+
                      isloadingCheckBalance,
-                         setIsLoading,
-                         provider,
                          test,
                          setTransactionSuccess,
-                    wallet,
                      }: IHaveAccountProps) => {
 
     const [transferTokens, setTransferTokens] = useState<string>('')
     const [chooseBtn, setChooseBtn] = React.useState<'funding' | 'withdraw' | ''>()
     const [accessWithdraw, setAccessWithdraw ] = React.useState<boolean | null>(null)
     const [accessFunding, setAccessFunding ] = React.useState<boolean | null>(null)
-    const [gameBalance, setGameBalance] = React.useState<string>('0')
+    const [gameBalance, setGameBalance] = React.useState<string>('2220')
+
+    const {telegramUsername,wallet, provider, balanceStt} = userStore.user;
+    const {modalWithdrawalAccess} = modalStatesStore.modals
 
     const { t } = useTranslation();
 
@@ -97,7 +96,6 @@ const HaveAccount = ({
         }
     };
 
-
     const handleBalance = () => {
         if(chooseBtn === 'funding') {
             if(accessFunding) {
@@ -119,6 +117,15 @@ const HaveAccount = ({
         }
     }
 
+
+    // const accessBtnHandler = (amount: string) => {
+    //     if(chooseBtn === 'funding') {
+    //         sendTokens(amount)
+    //     } else {
+    //         withdrawal()
+    //     }
+    // }
+
     /**Функция отправки токенов*/
     async function sendTokens(amount: string) {
 
@@ -130,7 +137,7 @@ const HaveAccount = ({
             return
         }
         if(+transferTokens == 0 || !transferTokens) {
-            showAttention(`Введите суму токенов для пополнения или вывода, минимальная сумма - 1000 STT`,'warning')
+            showAttention(`Введите сумму токенов для пополнения или вывода, минимальная сумма - 1000 STT`,'warning')
             return
         }
 
@@ -146,8 +153,16 @@ const HaveAccount = ({
         if (+transferTokens <= 0) {
             return;
         }
+
+        if(chooseBtn === 'withdraw') {
+            openModalWithdrawal()
+            return
+        }
+
+
         try {
-            setIsLoading({ isLoad: true, text: 'Preparation for the transaction' });
+
+            isLoadingStore.setState(true, 'Preparation for the transaction');
 
             const signer = await provider.getSigner();
             const userAddress = await signer.getAddress();
@@ -164,7 +179,7 @@ const HaveAccount = ({
 
             // Если allowance меньше необходимого количества, выполняем approve
             if (allowanceBefore < tokenAmount) {
-                setIsLoading({ isLoad: true, text: 'Waiting for approve transaction confirmation' });
+                isLoadingStore.setState(true, 'Waiting for approve transaction confirmation');
 
                 const txApprove = await contractCommon.approve(sttAffiliateAddress, tokenAmount);
                 console.log('Approve transaction sent:', txApprove.hash);
@@ -175,28 +190,32 @@ const HaveAccount = ({
                 console.log('Approve not required, allowance is sufficient');
             }
 
-            setIsLoading({ isLoad: true, text: 'Preparing token transfer' });
+            isLoadingStore.setState(true, 'Preparing token transfer');
 
             // Выполняем перевод токенов
             const tx = await contract.paymentToTheShop(FUNDING_WALLET_IQ_PUMP, tokenAmount);
             console.log('Transaction sent:', tx?.hash);
 
-            setIsLoading({ isLoad: true, text: 'Transaction sent' });
+            isLoadingStore.setState(true, 'Transaction sent');
 
             await tx.wait();
             console.log('Transaction confirmed');
+            isLoadingStore.setState(true, 'Transaction confirmed');
 
-            setIsLoading({ isLoad: true, text: 'Transaction confirmed' });
             setTransferTokens('0');
             setTransactionSuccess(prev => !prev);
 
         } catch (error) {
             console.error('Error sending tokens:', error);
             showAttention(`Error sending tokens`, 'error');
-            setIsLoading({ isLoad: false, text: '' });
+
         } finally {
-            setIsLoading({ isLoad: false, text: '' });
-        }
+            isLoadingStore.setState(false, '');        }
+    }
+
+    /** вывод токенов*/
+    const openModalWithdrawal: ()=> void = () => {
+        modalStatesStore.setState('modalWithdrawalAccess', {isOpen: true, isClosing: false})
     }
 
     const formatNumber = (num:number):string => {
@@ -304,8 +323,13 @@ const HaveAccount = ({
                     </div>
                 </div>
             </div>
+            <Portal whereToAdd={document.body}>
+                <Modal show={modalWithdrawalAccess?.isOpen} closing={modalWithdrawalAccess?.isClosing}>
+                    <WithdrawalAccess tokens={transferTokens}/>
+                </Modal>
+            </Portal>
         </div>
     );
-};
+});
 
 export default HaveAccount;

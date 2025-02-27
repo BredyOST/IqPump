@@ -2,22 +2,20 @@ import cls from './not-authorized-user.module.scss';
 import {useState} from "react";
 import React from 'react';
 import {useTranslation} from "react-i18next";
+import {userStore} from "../../shared/mobX/store/userStore.ts";
+import {observer} from "mobx-react-lite";
 
 export interface INotAuthorizedUserProps {
-    telegramUsername:string;
-    loggedIn:boolean;
-    hasAccountIpPump:boolean;
     test:(arg:boolean) => void;
 }
 
-const NotAuthorizedUser = ({
-                               loggedIn,
-                               telegramUsername,
-                               hasAccountIpPump,
+const NotAuthorizedUser = observer(({
                                test
                            }: INotAuthorizedUserProps) => {
 
     const [textInfo, setTextInfo] = useState<string>('');
+    const {loggedIn, telegramUsername, hasAccountIpPump} = userStore.user;
+
     const { t, i18n } = useTranslation();
 
     React.useEffect(() => {
@@ -66,6 +64,6 @@ const NotAuthorizedUser = ({
             </div>
         </div>
     );
-};
+})
 
 export default NotAuthorizedUser;

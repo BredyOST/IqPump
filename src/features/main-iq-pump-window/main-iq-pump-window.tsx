@@ -1,6 +1,6 @@
 import React  from 'react';
 import NotAuthorizedUser from "../not-authorized-user/not-authorized-user.tsx";
-import {ERROR_CHECK_TG, IUserInfo, ModalIndicators} from "../../entities/entities.ts";
+import {ERROR_CHECK_TG} from "../../entities/entities.ts";
 import {useAppKit} from "@reown/appkit/react";
 import cls from './main-iq-pump-window.module.scss';
 import CustomButton from "../../shared/ui/custom-button/custom-button.tsx";
@@ -19,26 +19,19 @@ import Loader from "../../widjets/loader/loader.tsx";
 import { useTranslation } from 'react-i18next';
 import CustomSelect from "../../shared/ui/select/custom-select.tsx";
 import i18next from "i18next";
+import {userStore} from "../../shared/mobX/store/userStore.ts";
+import {isLoadingStore} from "../../shared/mobX/store/isLoadingStore.ts";
+import {observer} from "mobx-react-lite";
+import {modalStatesStore} from "../../shared/mobX/store/modalStatesStore.ts";
 
-const MainIqPumpWindow = () => {
+const MainIqPumpWindow = observer(() => {
 
-    const [authoriedInfo, setAuthoriedInfo] = React.useState<IUserInfo>({
-        loggedIn:false,
-        wallet:'',
-        telegramUsername:'',
-        hasAccountIpPump:false,
-        telegramCode:null,
-        telegramValid:false,
-        balanceStt:'',
-        provider:null
-    })
-
-    const [modalNotifications, setModalNotifications] = React.useState<ModalIndicators>({isOpen:false, isClosing: false})
-    const [modalCheckSafetyConnection, setsModalCheckSafetyConnection] = React.useState<ModalIndicators>({isOpen:false, isClosing: false})
-    const [isLoading, setIsLoading] = React.useState<{isLoad:boolean, text: string}>({isLoad:false, text: ''})
     const [isLoadingCheckingBalance, setIsLoadingCheckingBalance] = React.useState<boolean>(false)
     const [transactionSuccess, setTransactionSuccess] = React.useState<boolean>(false)
     const [showSelectMenu, setShowSelectMenu] = React.useState<boolean>(false)
+
+    const {loggedIn, telegramUsername, hasAccountIpPump, wallet} = userStore.user;
+    const {modalCheckSafetyConnection, modalNotifications} = modalStatesStore.modals
 
     const { t } = useTranslation();
 
@@ -51,19 +44,20 @@ const MainIqPumpWindow = () => {
     /** проверка подключения уведомлений и отправка сообщения в тг о входе в аккаунт*/
     async function checkNotifications(): Promise<boolean> {
         try {
-            setIsLoading((prev) => ({...prev, isLoad: true,  text: ''}))
-            const data: { account: string } = { account: authoriedInfo?.wallet };
-            const response: any = await axios.post('https://stt.market/api/notifications/check/', data);
+            isLoadingStore.setState(true, '');
 
+            const data: { account: string } = { account: wallet };
+            const response: any = await axios.post('https://stt.market/api/notifications/check/', data);
+            console.log('проверка тг')
+            console.log(response);
             if (response?.status === 200) {
                 const responseData:any = response?.data;
 
-                setAuthoriedInfo((prev) => ({...prev, telegramUsername:responseData?.username}));
+                userStore.setState('telegramUsername', responseData?.username);
 
                 /** отправка уведомления*/
                 const data: { username: string } = { username: responseData?.username };
                 await axios.post('https://stt.market/api/notifications/safety/', data);
-                // showAttention(SEND_MSG_TO_TELEGRAM, 'success')
             }
             return true
         } catch (err) {
@@ -71,21 +65,22 @@ const MainIqPumpWindow = () => {
             console.error('Error checking notifications:', err);
             return true
         } finally {
-            setIsLoading({isLoad: false,  text: ''})
+            isLoadingStore.setState(false, '');
         }
     }
 
     /** открытие попапа уведомлений*/
     async function  openModalSafetyConnection ():Promise<void> {
-        if (authoriedInfo?.telegramUsername) {
-            setIsLoading((prev) => ({...prev, isLoad: true,  text: ''}))
+        if (telegramUsername) {
+            isLoadingStore.setState(true, '');
+
             const result = await checkNotifications();
             if(result){
-                setIsLoading((prev) => ({...prev, isLoad: false,  text: ''}))
-                setsModalCheckSafetyConnection({isOpen:true, isClosing: false})
+                isLoadingStore.setState(false, '')
+                modalStatesStore.setState('modalCheckSafetyConnection', {isOpen:true, isClosing: false})
             }
         } else {
-            setsModalCheckSafetyConnection({isOpen:true, isClosing: false})
+            modalStatesStore.setState('modalCheckSafetyConnection', {isOpen:true, isClosing: false})
         }
     };
 
@@ -101,10 +96,16 @@ const MainIqPumpWindow = () => {
     /** создание провайдера и получение адреса кошелька*/
     async function getInfo(providerWallet: any): Promise<void> {
         try {
+            console.log('getInfo')
             const ethersProvider = new BrowserProvider(providerWallet);
             const signer = await ethersProvider.getSigner();
             const userAddress = await signer.getAddress();
-            setAuthoriedInfo((prev) => ({...prev, loggedIn:true,  wallet:userAddress, provider: ethersProvider}));
+
+            userStore.setState('loggedIn', true)
+            userStore.setState('wallet', userAddress)
+            userStore.setState('provider', ethersProvider)
+            console.log('wallet')
+            console.log(userAddress)
 
         } catch (err) {
             console.log(err);
@@ -114,27 +115,32 @@ const MainIqPumpWindow = () => {
     /** Функция проверки телеграмма*/
     async function prepareTelegram(): Promise<void> {
         try {
-            setIsLoading({isLoad: true,  text: ''})
-            const data: { account: string } = { account: authoriedInfo?.wallet };
+            isLoadingStore.setState(true, '');
+
+            const data: { account: string } = { account: wallet };
             const response = await axios.post('https://stt.market/api/notifications/create/', data);
+            console.log('prepareTelegram')
+            console.log(response?.data)
 
             if (response.status === 200) {
                 let responseData:any = response.data;
-                setModalNotifications({isOpen:true, isClosing: false})
+
+                modalStatesStore.setState('modalNotifications', {isOpen:true, isClosing: false})
 
                 if (responseData.status === 400) {
-                    setModalNotifications({isOpen:true, isClosing: false})
-                    // showAttention(responseData?.message, 'error')
+                    modalStatesStore.setState('modalNotifications', {isOpen:true, isClosing: false})
+
                 } else if (responseData.status === 200) {
-                    setAuthoriedInfo((prev) => ({...prev, telegramValid:responseData?.valid,  telegramCode:responseData?.code}));
-                    setModalNotifications({isOpen:true, isClosing: false})
+                    userStore.setState('telegramValid', responseData?.valid)
+                    userStore.setState('telegramCode', responseData?.code)
+                    modalStatesStore.setState('modalNotifications', {isOpen:true, isClosing: false})
                 }
             }
         } catch (err) {
             showAttention(ERROR_CHECK_TG, 'error')
             console.log(err);
         } finally {
-            setIsLoading({isLoad: false,  text: ''})
+            isLoadingStore.setState(false, '');
         }
     }
 
@@ -146,8 +152,8 @@ const MainIqPumpWindow = () => {
 
             const contract = new ethers.Contract(tokenContractAddress, tokenContractAbi, provider);
 
-            const stBalance = +(Number(await contract.balanceOf(authoriedInfo.wallet)) / Math.pow(10, 9) - 0.01).toFixed(2);
-            setAuthoriedInfo((prev) => ({...prev, balanceStt: stBalance.toString()}));
+            const stBalance = +(Number(await contract.balanceOf(wallet)) / Math.pow(10, 9) - 0.01).toFixed(2);
+            userStore.setState('balanceStt', stBalance.toString())
 
         } catch (err) {
             console.log(err);
@@ -166,7 +172,10 @@ const MainIqPumpWindow = () => {
     /** при смене сети или входе через кошелек проверяем chainid и меняем на арбитрум если требуется*/
     React.useEffect(() => {
         if (!isConnected) {
-            setAuthoriedInfo((prev) => ({...prev, loggedIn: false, wallet: ''}));
+            userStore.setState('loggedIn', false)
+            userStore.setState('wallet', '')
+            userStore.setState('provider', '')
+
         } else if (chainId !== arbitrum?.id) {
             showAttention(`Please, connect to Arbitrum Network (${arbitrum?.id})`, 'error');
             switchNetwork(arbitrum);
@@ -175,21 +184,24 @@ const MainIqPumpWindow = () => {
 
     /** проверяем при авторизации к какой сети подключается пользователь*/
     React.useEffect(() => {
+        console.log('provider')
+        console.log(walletProvider)
         if (walletProvider && chainId === arbitrum?.id) {
             getInfo(walletProvider);
         }
     }, [walletProvider, chainId]);
 
    React.useEffect(() => {
-        if (authoriedInfo?.wallet) checkNotifications();
-       setTimeout(() => setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:false})), 500)
+        if (wallet) checkNotifications();
+        /** pапрос на бек*/
+       // userStore.setState('hasAccountIpPump', false)
 
-   }, [authoriedInfo?.wallet]);
+   }, [wallet]);
 
     React.useEffect(() => {
         setIsLoadingCheckingBalance(true)
         fetchBalanceData(walletProvider);
-    }, [isConnected, authoriedInfo.wallet]);
+    }, [wallet]);
 
     React.useEffect(() => {
         fetchBalanceData(walletProvider)
@@ -197,7 +209,8 @@ const MainIqPumpWindow = () => {
 
     /** для теста*/
     const change:(arg:boolean) => void = (value) => {
-       setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:value}))
+        userStore.setState('hasAccountIpPump', !hasAccountIpPump)
+        userStore.setState('hasAccountIpPump', value)
     }
 
     return (
@@ -231,24 +244,14 @@ const MainIqPumpWindow = () => {
                         </CustomButton>
                     </div>
                 </div>
-                {!authoriedInfo?.hasAccountIpPump &&
+                {!hasAccountIpPump &&
                     <NotAuthorizedUser
-                        loggedIn={authoriedInfo.loggedIn}
-                        telegramUsername={authoriedInfo.telegramUsername}
-                        hasAccountIpPump={authoriedInfo.hasAccountIpPump}
                         test={change}
                     />
                 }
-                {authoriedInfo?.loggedIn && authoriedInfo?.hasAccountIpPump &&
+                {loggedIn && hasAccountIpPump &&
                     <HaveAccount
-                        wallet={authoriedInfo?.wallet}
-                        telegramUsername={authoriedInfo?.telegramUsername}
-                        hasAccountIpPump={authoriedInfo?.hasAccountIpPump}
-                        loggedIn={authoriedInfo?.loggedIn}
-                        balanceStt={authoriedInfo?.balanceStt}
                         isloadingCheckBalance={isLoadingCheckingBalance}
-                        provider={authoriedInfo?.provider}
-                        setIsLoading={setIsLoading}
                         setTransactionSuccess={setTransactionSuccess}
                         test={change}
                     />
@@ -256,29 +259,19 @@ const MainIqPumpWindow = () => {
             </div>
             <Portal whereToAdd={document.body}>
                 <Modal show={modalNotifications?.isOpen} closing={modalNotifications?.isClosing}>
-                    <NotificationTg
-                        state={authoriedInfo}
-                        setModalNotifications={setModalNotifications}
-                        setModalSafetyConnection={setsModalCheckSafetyConnection}
-                        setState={setAuthoriedInfo}
-                        isLoadingHandler={setIsLoading}
-                    />
+                    <NotificationTg/>
                 </Modal>
             </Portal>
             <Portal whereToAdd={document.body}>
                 <Modal show={modalCheckSafetyConnection?.isOpen} closing={modalCheckSafetyConnection?.isClosing}>
-                    <SafetyConnection
-                        state={authoriedInfo}
-                        setModalSafetyConnection={setsModalCheckSafetyConnection}
-                        isLoadingHandler={setIsLoading}
-                    />
+                    <SafetyConnection/>
                 </Modal>
             </Portal>
             <Portal whereToAdd={document.body}>
-                <Loader isLoading={isLoading?.isLoad} text={isLoading?.text}></Loader>
+                <Loader/>
             </Portal>
         </div>
     );
-};
+});
 
 export default MainIqPumpWindow;

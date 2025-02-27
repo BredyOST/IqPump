@@ -1,56 +1,47 @@
 import axios from 'axios';
-import React from 'react';
 import cls from './notifictionTg.module.scss';
 import CustomButton from "../../../shared/ui/custom-button/custom-button.tsx";
 import Countdown from "react-countdown";
-import {IUserInfo} from "../../../entities/entities.ts";
 import {showAttention} from "../../../shared/tostify/attention.ts";
 import {useTranslation} from "react-i18next";
+import {userStore} from "../../../shared/mobX/store/userStore.ts";
+import {observer} from "mobx-react-lite";
+import {isLoadingStore} from "../../../shared/mobX/store/isLoadingStore.ts";
+import {modalStatesStore} from "../../../shared/mobX/store/modalStatesStore.ts";
+import React from 'react'
 
-interface INotificationTg {
-    state: IUserInfo
-    setState: React.Dispatch<React.SetStateAction<IUserInfo>>;
-    setModalNotifications: (arg: {isOpen:boolean, isClosing: boolean}) => void
-    setModalSafetyConnection: (arg: {isOpen:boolean, isClosing: boolean}) => void
-    isLoadingHandler:(arg:{isLoad: boolean,  text: string}) => void
-}
+const NotificationTg = observer(() => {
 
-const NotificationTg = ({
-                    state,
-
-                    setState,
-                    setModalNotifications,
-                    setModalSafetyConnection,
-                            isLoadingHandler
-                        }: INotificationTg) => {
-
+    const {wallet, telegramUsername, telegramValid, telegramCode} = userStore.user;
+    const { t } = useTranslation();
 
     /** FUNCTIONS*/
     /** для закрытия модального окна*/
     const closeModalSafetyConnection:() => void = () => {
-        setModalSafetyConnection({isOpen:false, isClosing: true})
+        modalStatesStore.setState('modalCheckSafetyConnection', {isOpen:false, isClosing: true})
     };
 
     const closeModalNotifications:() => void = () => {
-        setModalNotifications({isOpen:false, isClosing: true})
+        modalStatesStore.setState('modalNotifications', {isOpen:false, isClosing: true})
     };
 
     /** Функция отображения попапа*/
     const showModalNotifications:() => void = () => {
-        setModalNotifications({isOpen:true, isClosing: false})
+        modalStatesStore.setState('modalNotifications', {isOpen:true, isClosing: false})
     };
 
 
     /** проверяем подключены ли телеграмм уведомления*/
     async function checkTelegram(requested:any) {
         try {
-            isLoadingHandler({isLoad: true,  text: ''})
 
-            const data = { account: state?.wallet };
+            isLoadingStore.setState(true, '');
+
+            const data = { account: wallet };
             const response = await axios.post('https://stt.market/api/notifications/check/', data);
             if (response.status === 200) {
                 let responseData:any = response.data;
-                setState((prev) =>({...prev, telegramUsername: responseData?.username}));
+                userStore.setState('telegramUsername', responseData?.username)
 
                 if (requested) {
                     if (responseData.username !== '') {
@@ -63,21 +54,24 @@ const NotificationTg = ({
         } catch (err) {
             console.log(err);
         } finally {
-            isLoadingHandler({isLoad: false,  text: ''})
+            isLoadingStore.setState(false, '');
         }
     }
 
     async function changeTelegram() {
         try {
-            isLoadingHandler({isLoad: true,  text: ''})
-            const data = { account: state?.wallet };
+            isLoadingStore.setState(true, '');
+
+            const data = { account: wallet };
+
             const response = await axios.post('https://stt.market/api/notifications/change/', data);
             if (response.status === 200) {
                 let responseData = response.data;
                 if (responseData.status === 400) {
                     showAttention(responseData?.message, 'warning')
                 } else if (responseData.status === 200) {
-                    setState((prev) => ({ ...prev, telegramUsername: '' }));
+                    userStore.setState('telegramUsername', '')
+
                     closeModalSafetyConnection();
                     prepareTelegram();
                 }
@@ -85,38 +79,45 @@ const NotificationTg = ({
         } catch (err) {
             console.log(err);
         } finally {
-            isLoadingHandler({isLoad: false,  text: ''})
+            isLoadingStore.setState(false, '');
+
         }
     }
 
     async function prepareTelegram() {
         try {
-            isLoadingHandler({isLoad: true,  text: ''})
-            const data = { account: state?.wallet };
+
+            isLoadingStore.setState(true, '');
+
+            const data = { account: wallet };
             const response = await axios.post('https://stt.market/api/notifications/create/', data);
             if (response.status === 200) {
                 let responseData:any = response.data;
                 if (responseData.status === 400) {
                     showAttention(responseData?.message, 'warning')
                 } else if (responseData.status === 200) {
-                    setState((prev) => ({ ...prev, telegramValid: responseData.valid, telegramCode: responseData.code }));
+                    userStore.setState('telegramValid', responseData.valid)
+                    userStore.setState('telegramCode', responseData.code)
                     showModalNotifications();
                 }
             }
         } catch (err) {
             console.log(err);
         } finally {
-            isLoadingHandler({isLoad: false,  text: ''})
+            isLoadingStore.setState(false, '');
         }
     }
-    const { t } = useTranslation();
+
+    React.useEffect(() => {
+        console.log(telegramUsername)
+    },[telegramUsername])
 
     return (
         <>
             <div className={cls.wallet_header_telegram}>
                 <div className={cls.wrapper}>
                     <div className={cls.stt_modal_header}>
-                        {state?.telegramUsername !== '' ? (
+                        {telegramUsername !== '' ? (
                             <>
                                 <div className={cls.notification_header}>NOTIFICATIONS</div>
                                 <CustomButton
@@ -130,13 +131,13 @@ const NotificationTg = ({
                                 <div className={cls.cover_head}>
                                     <div>
                                         {' '}
-                                        {t('Address')} ****{state?.wallet?.substr(state?.wallet?.length - 4)} {t('linked')}
+                                        {t('Address')} ****{wallet?.substr(wallet?.length - 4)} {t('linked')}
                                         <br />
                                         Telegram {t('account')}
                                     </div>
                                 </div>
                                 <div className={cls.cover_body_userName}>
-                                    <div>{state?.telegramUsername}</div>
+                                    <div>{telegramUsername}</div>
                                 </div>
                                 <div className={cls.cover_footer}></div>
                                 <CustomButton onClick={changeTelegram} classNameBtn={cls.btn} type='button'>
@@ -167,11 +168,11 @@ const NotificationTg = ({
                                     <div className={cls.cover_body}>
                                         <div> {t('sendCode')}</div>
                                         <div> {t('CodeBelow')}</div>
-                                        <div className={cls.code}>{state?.telegramCode}</div>
+                                        <div className={cls.code}>{telegramCode}</div>
                                     </div>
                                     <div className={cls.cover_footer}>
                                         <div>{t('codeExpire')}</div>
-                                        <Countdown date={new Date(+state?.telegramValid * 1000)} />
+                                        <Countdown date={new Date(+telegramValid * 1000)} />
                                     </div>
                                     <CustomButton onClick={() => checkTelegram(true)} classNameBtn={cls.btn} type='button'>
                                         {' '}
@@ -185,6 +186,6 @@ const NotificationTg = ({
             </div>
         </>
     );
-};
+});
 
 export default NotificationTg;
