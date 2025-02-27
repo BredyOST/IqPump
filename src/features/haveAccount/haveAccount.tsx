@@ -37,37 +37,112 @@ const HaveAccount = ({
                     wallet,
                      }: IHaveAccountProps) => {
 
-    const [transferTokens, setTransferTokens] = useState<string>('0');
+    const [transferTokens, setTransferTokens] = useState<string>('')
+    const [chooseBtn, setChooseBtn] = React.useState<'funding' | 'withdraw' | ''>()
+    const [accessWithdraw, setAccessWithdraw ] = React.useState<boolean | null>(null)
+    const [accessFunding, setAccessFunding ] = React.useState<boolean | null>(null)
+    const [gameBalance, setGameBalance] = React.useState<string>('0')
+
+    const { t } = useTranslation();
 
     /** для ввода токенов для отправки*/
     const setTokensForTransfer = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target.value;
+
+        if(!chooseBtn) {
+            showAttention('выберите действие, "пополнить или вывести" ', 'warning')
+            return;
+        }
+        const inputValue = e.target.value
 
         // Проверка на допустимые символы (цифры и точка)
-        const isValidInput = /^\d*\.?\d{0,3}$/.test(inputValue);
+        const isValidInput = /^\d*\.?\d{0,3}$/.test(inputValue)
 
         if (!isValidInput) {
-            return; // Если введены недопустимые символы, просто игнорируем
+            return;
         }
 
         const number = parseFloat(inputValue);
 
-        if (+number > +balanceStt) {
-            setTransferTokens(balanceStt.toString());
-            // calculateReceivedAmount(balanceStt, walletProvider);
-        } else if (inputValue.length === 0) {
-            setTransferTokens('0');
-            // setSendTokensValue('0');
+        /**проверка*/
+        if(chooseBtn === 'funding') {
+            if(!balanceStt || balanceStt === '0' || +balanceStt <= 0) {
+                showAttention('У вас недостаточно на балансе для пополнения', 'warning')
+                return;
+            }
+            if (+number > +balanceStt) {
+                setTransferTokens(balanceStt.toString());
+                setAccessFunding(true)
+            } else if (inputValue.length === 0) {
+                setTransferTokens('0');
+                setAccessFunding(null)
+            }  else {
+                setAccessFunding(true)
+                setTransferTokens(inputValue);
+            }
         } else {
-            setTransferTokens(inputValue);
-            // calculateReceivedAmount(inputValue, walletProvider);
+            if((!gameBalance || gameBalance == '0') || +gameBalance <= 0) {
+                showAttention('На балансе игры не достаточно токенов для вывода', 'warning')
+                return;
+            }
+            if (+number > +gameBalance ) {
+                setTransferTokens(gameBalance.toString());
+                setAccessWithdraw(true)
+            } else if (inputValue.length === 0) {
+                setTransferTokens('0');
+                setAccessWithdraw(false)
+            } else {
+                setAccessWithdraw(true)
+                setTransferTokens(inputValue);
+            }
         }
     };
 
+
+    const handleBalance = () => {
+        if(chooseBtn === 'funding') {
+            if(accessFunding) {
+                    return true
+            } else {
+                showAttention('Введите сумму токенов в поле ввода','warning')
+                return false
+            }
+        } else if(chooseBtn === 'withdraw') {
+            if(accessWithdraw) {
+                return true
+            } else {
+                showAttention('Введите сумму токенов в поле ввода','warning')
+                return false
+            }
+        } else {
+            showAttention('Для вывода или пополнения баланса игры необходимо ввести сумму токенов и выбрать действие "пополнить или вывести"','warning')
+            return false
+        }
+    }
+
     /**Функция отправки токенов*/
-
-
     async function sendTokens(amount: string) {
+
+        if(chooseBtn === 'funding' && +balanceStt < 1000) {
+            showAttention(`На вашем балансе ${balanceStt} STT, минимальная сумма для пополнения 1000 STT`,'warning')
+            return
+        } else if (chooseBtn === 'withdraw' && +gameBalance < 1000) {
+            showAttention(`На вашем игровом балансе ${gameBalance} STT, минимальная сумма для вывода 1000 STT`,'warning')
+            return
+        }
+        if(+transferTokens == 0 || !transferTokens) {
+            showAttention(`Введите суму токенов для пополнения или вывода, минимальная сумма - 1000 STT`,'warning')
+            return
+        }
+
+        if(+transferTokens < 1000) {
+            showAttention(` Минимальная сумма токенов для вывода  пополнения - 1000 STT`,'warning')
+            return
+        }
+
+        const result = handleBalance()
+
+        if(!result) return result
+
         if (+transferTokens <= 0) {
             return;
         }
@@ -128,31 +203,74 @@ const HaveAccount = ({
         return num.toLocaleString('en-US', { minimumFractionDigits: 0 });
     };
 
-    const { t } = useTranslation();
+    const changeChoose = (text: 'funding' | 'withdraw') => {
+        if(text === chooseBtn) {
+            setChooseBtn('');
+        } else {
+            if(text === 'funding') {
+                if(transferTokens < balanceStt) {
+                    setAccessFunding(false)
+                } else if(transferTokens > balanceStt) {
+                    setAccessFunding(true);
+                } else {
+                    setAccessFunding(null)
+                }
+            } else {
+                if(transferTokens < gameBalance) {
+                    setAccessFunding(false)
+                } else if(transferTokens > gameBalance) {
+                    setAccessFunding(true)
+                } else {
+                    setAccessFunding(null)
+                }
+            }
+            setChooseBtn(text);
+        }
+    }
+
+    React.useEffect(() => {
+      if(chooseBtn === '' || !chooseBtn) {
+          setAccessWithdraw(null)
+          setAccessFunding(null)
+      }
+        setTransferTokens('')
+    },[chooseBtn])
+
 
     return (
         <div className={cls.wrapper}>
-            <div className={cls.title_cover}>
+            <div>
                 <h3 className={cls.title}>IQ PUMP</h3>
-                <img src="./svg/brain.svg" className={cls.icon} alt="icons"/>
-                <div className={cls.th_info}>
-                    <div className={cls.user_name_tg}>{telegramUsername}</div>
-                    <div className={cls.adress}>{`${wallet?.slice(0, 10)}...${wallet?.slice(35)}`}</div>
+                <div className={cls.title_cover_main}>
+                    <div className={cls.cover_for_position}>
+                        <div className={cls.title_cover}>
+                            <img src="./svg/brain.svg" className={cls.icon} alt="icons"/>
+                            <div className={cls.background}></div>
+                        </div>
+                    </div>
+                    <div className={cls.th_info}>
+                        <div className={cls.user_name_tg}>{telegramUsername}</div>
+                        <div className={cls.adress}>{`${wallet?.slice(0, 10)}...${wallet?.slice(35)}`}</div>
+                    </div>
                 </div>
             </div>
             <div className={cls.balance_body_block}>
                 <div className={cls.balance_block}>
                     <h3 className={cls.subtitle_block}>{t('balance')}</h3>
-                    <div className={cls.balance_stt}>{isloadingCheckBalance ? 'checking...' : formatNumber(+balanceStt)?.toString()} STT</div>
+                    <div
+                        className={cls.balance_stt}>{isloadingCheckBalance ? 'checking...' : formatNumber(+gameBalance)?.toString()} STT
+                    </div>
                     <div className={cls.btns_block}>
-                        <CustomButton onClick={() => sendTokens(transferTokens)} type='button'
-                                      classNameBtn={`${cls.btn_cash} ${cls.left}`}>
+                        <CustomButton onClick={() => changeChoose('funding')} type='button'
+                                      classNameBtn={`${cls.btn_cash} ${cls.left} ${chooseBtn === 'funding' ? cls.active : ''}`}>
                             <div className={cls.text_in_btn}>
+                                <div>+</div>
                                 <div className={cls.add_money}>{t('funding')}</div>
                             </div>
                         </CustomButton>
-                        <CustomButton type='button' classNameBtn={`${cls.btn_cash} ${cls.right}`}>
+                        <CustomButton onClick={() => changeChoose('withdraw')} type='button' classNameBtn={`${cls.btn_cash} ${cls.right} ${chooseBtn === 'withdraw' ? cls.active : ''}`}>
                             <div className={cls.text_in_btn}>
+                                <div>—</div>
                                 <div>{t('withdraw')}</div>
                             </div>
                         </CustomButton>
@@ -167,11 +285,15 @@ const HaveAccount = ({
                         classNameWrapper={cls.wrap_inp}
                         classNameInput={cls.inp}
                     />
-                    <div className={cls.range}>Min 1,000 - Max 5, 467 STT</div>
+                    {chooseBtn === 'funding' && +balanceStt >= 1000 && <div className={cls.range}>Min {formatNumber(1000)?.toString()} - Max {formatNumber(+balanceStt)?.toString()} STT</div>}
+                    {chooseBtn === 'funding' && +balanceStt < 1000 && <div className={`${cls.range} ${cls.red}`}>Your balance less then 1000 STT</div>}
+
+                    {chooseBtn === 'withdraw' && +gameBalance >= 1000 && <div className={cls.range}>Min {formatNumber(1000)?.toString()} - Max {formatNumber(+gameBalance)?.toString()} STT</div>}
+                    {chooseBtn === 'withdraw' && +gameBalance < 1000 && <div className={`${cls.range} ${cls.red}`}>Your balance less then 1000 STT</div>}
                 </div>
                 <div className={cls.cover_btn}>
                     <div className={cls.cover_btn_send_cover}>
-                        <CustomButton classNameBtn={cls.btn_send} type='button'>
+                        <CustomButton classNameBtn={`${cls.btn_send} ${((accessFunding || accessWithdraw) && +transferTokens >= 1000) ? cls.acess : ''}`} type='button' onClick={() => sendTokens(transferTokens)}>
                             {t('access')}
                         </CustomButton>
                     </div>

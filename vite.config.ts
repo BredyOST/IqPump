@@ -5,5 +5,9 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   plugins: [ react(),
     svgr(),
+
   ],
+  define: {
+    'process.env': '{}' // Подменяем process.env на пустой объект
+  }
 })

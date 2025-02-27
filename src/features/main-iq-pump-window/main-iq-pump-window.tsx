@@ -1,7 +1,7 @@
 import React  from 'react';
 import NotAuthorizedUser from "../not-authorized-user/not-authorized-user.tsx";
 import {ERROR_CHECK_TG, IUserInfo, ModalIndicators} from "../../entities/entities.ts";
-import {useAppKit, useAppKitState} from "@reown/appkit/react";
+import {useAppKit} from "@reown/appkit/react";
 import cls from './main-iq-pump-window.module.scss';
 import CustomButton from "../../shared/ui/custom-button/custom-button.tsx";
 import { useAppKitAccount, useAppKitNetwork, useAppKitProvider } from '@reown/appkit/react';
@@ -47,11 +47,7 @@ const MainIqPumpWindow = () => {
     const { walletProvider } = useAppKitProvider('eip155');
     const { chainId, switchNetwork } = useAppKitNetwork();
     const {  open,  } = useAppKit();
-
-    const { open:openTwo } = useAppKitState()
-
-
-
+    
     /** проверка подключения уведомлений и отправка сообщения в тг о входе в аккаунт*/
     async function checkNotifications(): Promise<boolean> {
         try {
@@ -142,31 +138,7 @@ const MainIqPumpWindow = () => {
         }
     }
 
-    /** при смене сети или входе через кошелек проверяем chainid и меняем на арбитрум если требуется*/
-    React.useEffect(() => {
-        if (!isConnected) {
-            setAuthoriedInfo((prev) => ({...prev, loggedIn: false, wallet: ''}));
-        } else if (chainId !== arbitrum?.id) {
-            showAttention(`Please, connect to Arbitrum Network (${arbitrum?.id})`, 'error');
-            switchNetwork(arbitrum);
-        }
-    }, [chainId, isConnected]);
-
-    /** проверяем при авторизации к какой сети подключается пользователь*/
-    React.useEffect(() => {
-        if (walletProvider && chainId === arbitrum?.id) {
-            getInfo(walletProvider);
-        }
-    }, [walletProvider, chainId]);
-
-
-   React.useEffect(() => {
-        if (authoriedInfo?.wallet) checkNotifications();
-       setTimeout(() => setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:false})), 500)
-
-   }, [authoriedInfo?.wallet]);
-
-    /** получаем токены*/
+    /** получаем токены на кошельке*/
     const fetchBalanceData = async (providerChain: any) => {
         try {
             if (!providerChain) return;
@@ -184,18 +156,40 @@ const MainIqPumpWindow = () => {
         }
     };
 
-    React.useEffect(() => {
-        setIsLoadingCheckingBalance(true)
-        fetchBalanceData(walletProvider);
-    }, [isConnected, authoriedInfo.wallet]);
-
-
     const openMenu:() => void = () => {
         setShowSelectMenu(prev => !prev)
     }
     const changeLanguage = (value:string) => {
         i18next.changeLanguage(value);
     }
+
+    /** при смене сети или входе через кошелек проверяем chainid и меняем на арбитрум если требуется*/
+    React.useEffect(() => {
+        if (!isConnected) {
+            setAuthoriedInfo((prev) => ({...prev, loggedIn: false, wallet: ''}));
+        } else if (chainId !== arbitrum?.id) {
+            showAttention(`Please, connect to Arbitrum Network (${arbitrum?.id})`, 'error');
+            switchNetwork(arbitrum);
+        }
+    }, [chainId, isConnected]);
+
+    /** проверяем при авторизации к какой сети подключается пользователь*/
+    React.useEffect(() => {
+        if (walletProvider && chainId === arbitrum?.id) {
+            getInfo(walletProvider);
+        }
+    }, [walletProvider, chainId]);
+
+   React.useEffect(() => {
+        if (authoriedInfo?.wallet) checkNotifications();
+       setTimeout(() => setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:false})), 500)
+
+   }, [authoriedInfo?.wallet]);
+
+    React.useEffect(() => {
+        setIsLoadingCheckingBalance(true)
+        fetchBalanceData(walletProvider);
+    }, [isConnected, authoriedInfo.wallet]);
 
     React.useEffect(() => {
         fetchBalanceData(walletProvider)
@@ -206,13 +200,8 @@ const MainIqPumpWindow = () => {
        setAuthoriedInfo((prev:IUserInfo)=> ({...prev, hasAccountIpPump:value}))
     }
 
-    React.useEffect(() => {
-        console.log(openTwo)
-    },[openTwo])
-
     return (
         <div className={cls.overlay}>
-            {/*<div className="app_container">*/}
             <div className={cls.cover}>
                 <div className={cls.notification_actions_btn}>
                     <CustomSelect
@@ -231,12 +220,11 @@ const MainIqPumpWindow = () => {
                         classNameBlockList={cls.bllock_list}
                     />
                     <div className={cls.cover_btns}>
-                        <CustomButton onClick={prepareTelegram} classNameBtn={cls.btn_stt} type='button'>
-                            <img src="./../../../src/assets/svg/notifications.svg" className={cls.icon_notifications}
-                                 alt=""/>
+                        <CustomButton classnameWrapper={cls.wrapper_btn} onClick={prepareTelegram} classNameBtn={cls.btn_stt} type='button'>
+                            <img src="./../../../src/assets/svg/notifications.svg" className={cls.icon_notifications} alt=""/>
                         </CustomButton>
-                        <CustomButton classNameBtn={cls.btn_stt} type='button' onClick={openModalSafetyConnection}>
-                            <img src="./../../../src/assets/svg/safety.svg" alt=""/>
+                        <CustomButton classnameWrapper={cls.wrapper_btn}  classNameBtn={cls.btn_stt} type='button' onClick={openModalSafetyConnection}>
+                            <img className={cls.icon_check} src="./../../../src/assets/svg/safety.svg" alt=""/>
                         </CustomButton>
                         <CustomButton classNameBtn={cls.btn_connect_login} type='button' onClick={connectAccount}>
                             {isConnected ? t('logout') : t('connect')}
@@ -289,7 +277,6 @@ const MainIqPumpWindow = () => {
             <Portal whereToAdd={document.body}>
                 <Loader isLoading={isLoading?.isLoad} text={isLoading?.text}></Loader>
             </Portal>
-            {/*</div>*/}
         </div>
     );
 };

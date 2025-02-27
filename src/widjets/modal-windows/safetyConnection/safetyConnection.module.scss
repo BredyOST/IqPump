@@ -24,7 +24,7 @@
 }
 
 .notification_header {
-    font-family: globalIndex.$font_family_main;
+    font-family: globalIndex.$font_family_Fourth;
     background-color: #8ffba3;
     width: mixins.rem(207);
     height: mixins.rem(56);
@@ -129,7 +129,7 @@
     padding-bottom: mixins.rem(14);
     font-size: mixins.rem(16);
     font-weight: 700;
-    font-family: globalIndex.$font_family_btn_first;
+    font-family: globalIndex.$font_family_Fourth;
     border-radius: mixins.rem(30);
     min-width: mixins.rem(137);
     min-height: mixins.rem(54);

@@ -35,24 +35,26 @@ const NotAuthorizedUser = ({
 
     return (
         <div className={cls.wrapper}>
-            <div className={cls.title_cover}>
-                <img src="./svg/brain.svg" className={cls.icon} alt="icons"/>
-                <h3 className={cls.title}>IQ PUMP</h3>
+            <div className={cls.cover_for_position}>
+                <div className={cls.title_cover}>
+                    <img src="./svg/brain.svg" className={cls.icon} alt="icons"/>
+                    <div className={cls.background}></div>
+                </div>
             </div>
             <div className={cls.cover}>
                 <div className={cls.balance_block}>
-                    <h3 className={cls.subtitle_block}>
+                    <h3 className={cls.title}>IQ PUMP</h3>
+                    <p className={cls.subtitle_block}>
                         {textInfo}
-                    </h3>
+                    </p>
                 </div>
                 <div className={cls.cover_btn_send_cover}>
                     <button onClick={() => test(true)}
-                       className={cls.btn_send}
-                       type='button'
+                            className={cls.btn_send}
+                            type='button'
                     >
                         {t('toIqPump')}
                     </button>
-
                     {/*<a href='https://web.telegram.org/a/#7893128019'*/}
                     {/*   target='_blank'*/}
                     {/*   className={cls.btn_send}*/}

@@ -1,7 +1,7 @@
-@use '../../shared/styles/variable/globalIndex';
-@use '../../shared/styles/variable/global';
-@use '../../shared/styles/mixins';
-@use '../../shared/styles/variable/common';
+@use '../../../shared/styles/variable/globalIndex';
+@use '../../../shared/styles/variable/global';
+@use '../../../shared/styles/mixins';
+@use '../../../shared/styles/variable/common';
 
 .overlay {
     position: fixed;

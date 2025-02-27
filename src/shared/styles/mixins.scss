@@ -277,6 +277,94 @@
         }
     }
 }
+
+@mixin adaptiveValueTransformAllHeight(
+    $property,
+    $startSizeX,
+    $minSizeX,
+    $startSizeY,
+    $minSizeY,
+    $keepSize: 0,
+    $heightFrom: 2500,
+    $heightTo: global.$minHeight
+) {
+    @if $startSizeX == 0 {
+        $startSizeX: 0.000001;
+    }
+
+    @if $minSizeX == 0 {
+        $minSizeX: 0.000001;
+    }
+
+    @if $startSizeY == 0 {
+        $startSizeY: 0.000001;
+    }
+
+    @if $minSizeY == 0 {
+        $minSizeY: 0.000001;
+    }
+
+    $addSizeX: math.div($startSizeX - $minSizeX, 16);
+    $addSizeY: math.div($startSizeY - $minSizeY, 16);
+
+    $heightFromMedia: em($heightFrom);
+    $heightToMedia: em($heightTo);
+
+    $slopeX: math.div(($startSizeX - $minSizeX), ($heightFrom - $heightTo));
+    $slopeY: math.div(($startSizeY - $minSizeY), ($heightFrom - $heightTo));
+
+    $yIntersectionX: -$heightTo * $slopeX + $minSizeX;
+    $yIntersectionY: -$heightTo * $slopeY + $minSizeY;
+
+    @if $yIntersectionX == 0 {
+        $yIntersectionX: 0.000001;
+    }
+
+    @if $yIntersectionY == 0 {
+        $yIntersectionY: 0.000001;
+    }
+
+    $flyValueX: #{rem($yIntersectionX)} + ' #{$slopeX * 100}vh';
+    $flyValueY: #{rem($yIntersectionY)} + ' #{$slopeY * 100}vh';
+
+    $propertyValueX: #{'clamp(' rem($minSizeX) ',' $flyValueX ',' rem($startSizeX) ')'};
+    $propertyValueY: #{'clamp(' rem($minSizeY) ',' $flyValueY ',' rem($startSizeY) ')'};
+
+    @if $minSizeX > $startSizeX {
+        $propertyValueX: #{'clamp(' rem($startSizeX) ',' $flyValueX ',' rem($minSizeX) ')'};
+    }
+
+    @if $minSizeY > $startSizeY {
+        $propertyValueY: #{'clamp(' rem($startSizeY) ',' $flyValueY ',' rem($minSizeY) ')'};
+    }
+
+    $propertyValue: translate(#{$propertyValueX}, #{$propertyValueY});
+
+    @if $keepSize != 1 and $keepSize != 3 {
+        @media (min-height: $heightFromMedia) {
+            #{$property}: translate(rem($startSizeX), rem($startSizeY));
+        }
+    }
+
+    @media (min-height: $heightToMedia) and (max-height: $heightFromMedia) {
+        @supports (#{$property}: $propertyValue) {
+            #{$property}: $propertyValue;
+        }
+
+        @supports not (#{$property}: $propertyValue) {
+            #{$property}: translate(
+                            calc(#{rem($minSizeX)} + #{$addSizeX} * (100vh - #{rem($heightTo)}) / #{math.div($heightFrom, 16) - math.div($heightTo, 16)}),
+                            calc(#{rem($minSizeY)} + #{$addSizeY} * (100vh - #{rem($heightTo)}) / #{math.div($heightFrom, 16) - math.div($heightTo, 16)})
+            );
+        }
+    }
+
+    @if $keepSize != 1 and $keepSize != 2 {
+        @media (max-height: $heightToMedia) {
+            #{$property}: translate(rem($minSizeX), rem($minSizeY));
+        }
+    }
+}
 @mixin adaptiveValueTransformAll(
     $property,
     $startSizeX,

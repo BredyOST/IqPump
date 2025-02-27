@@ -20,42 +20,68 @@
     row-gap: mixins.rem(80);
     align-items: center;
 
-    @include mixins.adaptiveHeight('row-gap', 80, 10, 3, 800, 600);
+    @media(min-height: mixins.em(1500)) {
+        padding-top: mixins.rem(640);
+    }
 
+    @media(max-height: mixins.em(200)) {
+        padding-top: mixins.rem(140);
+    }
 }
 
 .wrapper {
     display: flex;
     flex-direction: column;
-    row-gap: mixins.rem(80);
-    //padding-top: mixins.rem(110);
     padding-top: env(safe-area-inset-top, 0);
-    //@include mixins.adaptiveHeight('padding-top', 110, 80, 3, 1000, 500);
-    @include mixins.adaptiveHeight('row-gap', 80, 10, 3, 800, 600);
+    justify-content: center;
+    align-items: center;
+}
+
+.background {
+    position: absolute;
+    width: mixins.rem(1100);
+    height: mixins.rem(180);
+      background: radial-gradient(circle farthest-side at 50% 50%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
+    border-radius: 50%;
 }
 
 .icon {
-    width: mixins.rem(120);
-    height: mixins.rem(169);
+    z-index: 1000;
     object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 90%;
+    height: 90%;
+    transform: translate(-50%, 5%);
+}
+
+.cover_for_position {
+    display: flex;
+     min-width: 100%;
+    justify-content: center;
 }
 
 .title_cover {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    position: relative;
     align-items: center;
     color: #ffffff;
-    font-family: 'Lato';
     font-weight: 600;
-    font-size: mixins.rem(26);
     text-align: center;
     row-gap: mixins.rem(10);
+    border-radius: 50%;
+    width: mixins.rem(180);
+    height: mixins.rem(180);
 }
 
 .title {
     font-family: 'Luckiest Guy';
     font-weight: 700;
     color: #91fca5;
+    font-size: mixins.rem(26);
 }
 
 .svg_brain {
@@ -73,7 +99,7 @@
     text-align: center;
     border-radius: mixins.rem(15);
     row-gap: mixins.rem(20);
-    padding-top: mixins.rem(20);
+    padding-top: mixins.rem(10);
     padding-bottom: mixins.rem(20);
     padding-left: mixins.rem(10);
     padding-right: mixins.rem(10);
@@ -82,8 +108,8 @@
 
 .subtitle_block {
     font-size: mixins.rem(18);
+    padding-top: mixins.rem(10);
     font-weight: 700;
-    font-family: 'Lato';
     color: #ffffff;
         white-space: pre-line;
 }
@@ -106,7 +132,6 @@
     min-height: mixins.rem(70);
     font-size: mixins.rem(16);
     font-weight: 700;
-    font-family: globalIndex.$font_family_btn_first;
     border-radius: mixins.rem(40);
     min-width: mixins.rem(137);
 
@@ -121,11 +146,6 @@
     }
 }
 
-
-
 .cover_btn_send_cover {
-    padding-top: mixins.rem(30);
     display: flex;
-
-
 }

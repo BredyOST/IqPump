@@ -12,6 +12,7 @@
     flex-direction: column;
     width: mixins.rem(371);
     row-gap: mixins.rem(30);
+    font-family: 'Comfortaa';
 }
 
 .stt_modal_header {
@@ -82,7 +83,6 @@
 
 .linkCover,
 .cover_body_userName {
-    font-family: globalIndex.$font_family_main;
     color: #409798;
     font-weight: 600;
     font-size: mixins.rem(24);
@@ -107,7 +107,15 @@
     transition:
             background-color ease 0.3s,
             box-shadow ease 0.3s;
-
+    padding-left: mixins.rem(28);
+    padding-right: mixins.rem(28);
+    padding-top: mixins.rem(14);
+    padding-bottom: mixins.rem(14);
+    font-size: mixins.rem(16);
+    font-weight: 700;
+    border-radius: mixins.rem(30);
+    min-width: mixins.rem(137);
+    min-height: mixins.rem(54);
     @media (any-hover: hover) {
         &:hover {
             background-color: color.adjust(globalIndex.$btn_background_hover, $lightness: 10%);
@@ -118,16 +126,6 @@
                     box-shadow ease 0.3s;
         }
     }
-    padding-left: mixins.rem(28);
-    padding-right: mixins.rem(28);
-    padding-top: mixins.rem(14);
-    padding-bottom: mixins.rem(14);
-    font-size: mixins.rem(16);
-    font-weight: 700;
-    font-family: globalIndex.$font_family_btn_first;
-    border-radius: mixins.rem(30);
-    min-width: mixins.rem(137);
-    min-height: mixins.rem(54);
 }
 
 .wrapper_btn {
