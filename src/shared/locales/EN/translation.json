@@ -3,6 +3,9 @@
     "logout": "Logout",
     "needToGetAccess": "To use the deposit\n                and withdrawal features,\n                please log in to the site\n                and enable notifications\n                in Telegram.",
     "dontHaveAnAccount": "You do not have\n             a registered account\n             in IQ PUMP",
+    "writeCode": "Come up with a keyword for secure transaction processing.",
+    "writeCodeSecond": "Within 24 hours of submitting the request, you must confirm the transaction in the iq Pump app.",
+    "writeCodeSecondThird": "Without confirmation, the token withdrawal will be rejected.",
     "toIqPump": "Go to the game",
     "cancel": "Cancel",
     "Address": "Adress",
@@ -26,6 +29,10 @@
     "funding": "Deposit",
     "balance": "Balance",
     "withdraw": "Windrow",
+    "withdraw_": "withdraw",
     "access": "Confirm",
-    "needLogIn": "Login required"
+    "needLogIn": "Login required",
+    "checkCode": "Invalid input: minimum 6 characters, no spaces, only letters, numbers, and special characters",
+    "textCode": "Minimum 6 characters - letters, numbers, symbols",
+    "keyWord": "Create a keyword"
 }

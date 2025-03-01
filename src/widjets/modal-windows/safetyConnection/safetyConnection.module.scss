@@ -24,7 +24,7 @@
 }
 
 .notification_header {
-    font-family: globalIndex.$font_family_Fourth;
+    font-family: globalIndex.$font_family_main;
     background-color: #8ffba3;
     width: mixins.rem(207);
     height: mixins.rem(56);
@@ -59,10 +59,10 @@
 }
 
 .cover_body {
-    font-family: globalIndex.$font_family_main;
     font-size: mixins.rem(14);
     font-weight: 400;
     line-height: globalIndex.$line_height;
+    font-family: globalIndex.$font_family_main;
     text-align: center;
 }
 
@@ -129,7 +129,7 @@
     padding-bottom: mixins.rem(14);
     font-size: mixins.rem(16);
     font-weight: 700;
-    font-family: globalIndex.$font_family_Fourth;
+    font-family: globalIndex.$font_family_main;
     border-radius: mixins.rem(30);
     min-width: mixins.rem(137);
     min-height: mixins.rem(54);

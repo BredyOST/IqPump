@@ -25,7 +25,7 @@ const WithdrawalAccess = observer(() => {
 
         } else {
             showAttention(
-                "Неверный ввод: минимум 6 символов, без пробелов, только буквы, цифры и спецсимволы",
+                t("checkCode"),
                 "warning"
             );
         }
@@ -34,14 +34,12 @@ const WithdrawalAccess = observer(() => {
     const changeValueInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim(); // Убираем пробелы в начале и конце
         setTransferTokens(value)
-
     };
-
 
     return (
         <div className={cls.wrapper}>
             <div className={cls.stt_modal_header}>
-                <div className={cls.header}>{t('withdraw').toUpperCase()}</div>
+                <div className={cls.header}>{t('withdraw_').toUpperCase()}</div>
                 <CustomButton
                     onClick={closeModalWithdrawal}
                     classnameWrapper={cls.wrapper_btn}
@@ -51,27 +49,31 @@ const WithdrawalAccess = observer(() => {
                     <div className={cls.close_btn}></div>
                 </CustomButton>
                 <div className={cls.text}>
-                    Придумайте ключевое слово.
-                    Это слово необходимо будет ввести в приложении iq Pump для подтверждения транзкации
-                    в течении 24 ч с момента отправки заявки.
-                    Без подтверждения вывод токенов будет отклонен.
+                    <div>
+                        {t("writeCode")}<br/>
+                        <br/>
+                        {t("writeCodeSecond")}<br/>
+                        <br/>
+                        {t("writeCodeSecondThird")}
+                    </div>
                 </div>
                 <CustomInput
                     type='text'
-                    onChange={(e:React.ChangeEvent<HTMLInputElement>) => changeValueInput(e)}
-                    placeholder='введите ключевое слово'
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => changeValueInput(e)}
+                    placeholder={t("keyWord")}
                     value={transferTokens}
                     classNameWrapper={cls.wrap_inp}
                     classNameInput={cls.inp}
                 />
+                <div className={cls.text_info}>{t("textCode")}</div>
             </div>
             <div className={cls.cover_btn}>
-                <CustomButton onClick={sendRequset} classNameBtn={cls.btn} type='button'>
+            <CustomButton onClick={sendRequset} classNameBtn={cls.btn} type='button'>
                     {t('access')}
                 </CustomButton>
             </div>
         </div>
-            );
-            });
+    );
+ });
 
-            export default WithdrawalAccess;
+export default WithdrawalAccess;
