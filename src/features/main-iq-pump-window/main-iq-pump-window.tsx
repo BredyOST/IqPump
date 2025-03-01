@@ -246,10 +246,10 @@ const MainIqPumpWindow = observer(() => {
                     />
                     <div className={cls.cover_btns}>
                         <CustomButton classnameWrapper={cls.wrapper_btn} onClick={prepareTelegram} classNameBtn={cls.btn_stt} type='button'>
-                            <img src="./../../../src/assets/svg/notifications.svg" className={cls.icon_notifications} alt=""/>
+                            <img src="./svg/notifications.svg" className={cls.icon_notifications} alt="svg_icon"/>
                         </CustomButton>
                         <CustomButton classnameWrapper={cls.wrapper_btn}  classNameBtn={cls.btn_stt} type='button' onClick={openModalSafetyConnection}>
-                            <img className={cls.icon_check} src="./../../../src/assets/svg/safety.svg" alt=""/>
+                            <img className={cls.icon_check} src="./svg/safety.svg" alt="svg_icon"/>
                         </CustomButton>
                         <CustomButton classNameBtn={cls.btn_connect_login} type='button' onClick={connectAccount}>
                             {isConnected ? t('logout') : t('connect')}
