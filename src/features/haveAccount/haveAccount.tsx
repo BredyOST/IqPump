@@ -319,7 +319,7 @@ const HaveAccount = observer(({
             </div>
             <Portal whereToAdd={document.body}>
                 <Modal show={modalWithdrawalAccess?.isOpen} closing={modalWithdrawalAccess?.isClosing}>
-                    <WithdrawalAccess tokens={transferTokens}/>
+                    <WithdrawalAccess/>
                 </Modal>
             </Portal>
         </div>
