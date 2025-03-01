@@ -15,7 +15,7 @@ if (!projectId) {
 const metadata = {
   name: 'iq Pump',
   description: 'iq pump',
-  url: 'https://stt.market/',
+  url: 'https://iqpump.online/',
   icons: ['https://'],
 };
 
