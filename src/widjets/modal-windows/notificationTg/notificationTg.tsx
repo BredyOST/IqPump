@@ -8,7 +8,6 @@ import {userStore} from "../../../shared/mobX/store/userStore.ts";
 import {observer} from "mobx-react-lite";
 import {isLoadingStore} from "../../../shared/mobX/store/isLoadingStore.ts";
 import {modalStatesStore} from "../../../shared/mobX/store/modalStatesStore.ts";
-import React from 'react'
 
 const NotificationTg = observer(() => {
 

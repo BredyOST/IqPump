@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 import {showAttention} from "../../../shared/tostify/attention.ts";
 
 
-const WithdrawalAccess = observer(({tokens}: {tokens: string}) => {
+const WithdrawalAccess = observer(() => {
 
     const [transferTokens, setTransferTokens] = useState<string>('')
     const { t } = useTranslation();

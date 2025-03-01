@@ -245,6 +245,10 @@ const HaveAccount = observer(({
         setTransferTokens('')
     },[chooseBtn])
 
+    React.useEffect(() => {
+        setGameBalance(`1000`)
+    },[])
+
 
     return (
         <div className={cls.wrapper}>
