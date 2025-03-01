@@ -207,7 +207,6 @@ const MainIqPumpWindow = observer(() => {
         if (wallet) checkNotifications();
         /** pапрос на бек*/
        // userStore.setState('hasAccountIpPump', false)
-
    }, [wallet]);
 
     React.useEffect(() => {
