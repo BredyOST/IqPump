@@ -108,9 +108,8 @@ const NotificationTg = observer(() => {
         }
     }
 
-    React.useEffect(() => {
-        console.log(telegramUsername)
-    },[telegramUsername])
+
+
 
     return (
         <>
@@ -172,7 +171,8 @@ const NotificationTg = observer(() => {
                                     </div>
                                     <div className={cls.cover_footer}>
                                         <div>{t('codeExpire')}</div>
-                                        <Countdown date={new Date(+telegramValid * 1000)} />
+                                        <Countdown key={telegramUsername} date={new Date(+telegramValid * 1000)} />
+
                                     </div>
                                     <CustomButton onClick={() => checkTelegram(true)} classNameBtn={cls.btn} type='button'>
                                         {' '}

@@ -6,7 +6,7 @@ class ModalStatesStore {
         modals:IModalWindows = {
             modalNotifications: {isOpen: false, isClosing: false},
             modalCheckSafetyConnection: {isOpen: false, isClosing: false},
-            modalWithdrawalAccess: {isOpen: true, isClosing: false},
+            modalWithdrawalAccess: {isOpen: false, isClosing: false},
         }
 
     constructor() {

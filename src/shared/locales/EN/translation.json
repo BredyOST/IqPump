@@ -26,5 +26,6 @@
     "funding": "Deposit",
     "balance": "Balance",
     "withdraw": "Windrow",
-    "access": "Confirm"
+    "access": "Confirm",
+    "needLogIn": "Login required"
 }

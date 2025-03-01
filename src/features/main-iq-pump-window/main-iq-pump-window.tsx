@@ -71,6 +71,12 @@ const MainIqPumpWindow = observer(() => {
 
     /** открытие попапа уведомлений*/
     async function  openModalSafetyConnection ():Promise<void> {
+
+        if(!loggedIn) {
+            showAttention(t('needLogIn'), 'error')
+            return;
+        }
+
         if (telegramUsername) {
             isLoadingStore.setState(true, '');
 
@@ -115,6 +121,12 @@ const MainIqPumpWindow = observer(() => {
     /** Функция проверки телеграмма*/
     async function prepareTelegram(): Promise<void> {
         try {
+
+            if(!loggedIn) {
+                showAttention(t('needLogIn'), 'error')
+                return;
+            }
+
             isLoadingStore.setState(true, '');
 
             const data: { account: string } = { account: wallet };

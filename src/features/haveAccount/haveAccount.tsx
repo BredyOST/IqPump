@@ -117,15 +117,6 @@ const HaveAccount = observer(({
         }
     }
 
-
-    // const accessBtnHandler = (amount: string) => {
-    //     if(chooseBtn === 'funding') {
-    //         sendTokens(amount)
-    //     } else {
-    //         withdrawal()
-    //     }
-    // }
-
     /**Функция отправки токенов*/
     async function sendTokens(amount: string) {
 
@@ -158,7 +149,6 @@ const HaveAccount = observer(({
             openModalWithdrawal()
             return
         }
-
 
         try {
 
