@@ -47,7 +47,7 @@ code {
 body {
     color: globalIndex.$theme_main_text_color;
     line-height: 1;
-    font-family: globalIndex.$font_family_main, sans-serif;
+    font-family: globalIndex.$font_family_main;
     font-size: mixins.rem(globalIndex.$font_size_main);
     font-weight: globalIndex.$font_weight_main;
     text-size-adjust: 100%;

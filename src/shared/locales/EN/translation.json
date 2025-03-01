@@ -2,7 +2,7 @@
     "connect": "Login",
     "logout": "Logout",
     "needToGetAccess": "To use the deposit\n                and withdrawal features,\n                please log in to the site\n                and enable notifications\n                in Telegram.",
-    "dontHaveAnAccount": "You do not have\n             a registered account\n             in IQ PUMP.",
+    "dontHaveAnAccount": "You do not have\n             a registered account\n             in IQ PUMP",
     "toIqPump": "Go to the game",
     "cancel": "Cancel",
     "Address": "Adress",
