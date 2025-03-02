@@ -90,7 +90,7 @@ const MainIqPumpWindow = observer(() => {
         }
     };
 
-    /** авторизация через кошелек*/
+    // /** авторизация через кошелек*/
     // async function connectAccount(): Promise<void> {
     //     try {
     //         await open();
@@ -102,7 +102,7 @@ const MainIqPumpWindow = observer(() => {
     async function connectAccount(): Promise<void> {
         const timeout = 10000; // 10 секунд для тайм-аута
         let timeoutReached = false;
-
+        console.log('1')
         // Запускаем таймер
         const timeoutId = setTimeout(() => {
             timeoutReached = true;
@@ -114,9 +114,7 @@ const MainIqPumpWindow = observer(() => {
 
         try {
             // Выполнение попытки подключения
-            await open({
-                view: 'Connect', // Используем 'Connect' как пример для открытия страницы подключения
-            });
+            await open();
 
             // Если подключение прошло успешно, отменяем тайм-аут
             if (!timeoutReached) {
