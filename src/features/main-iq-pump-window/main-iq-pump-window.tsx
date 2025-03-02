@@ -91,11 +91,57 @@ const MainIqPumpWindow = observer(() => {
     };
 
     /** авторизация через кошелек*/
+    // async function connectAccount(): Promise<void> {
+    //     try {
+    //         await open();
+    //     } catch (error) {
+    //         console.log('Error handle loginThunk', error);
+    //     }
+    // }
+
     async function connectAccount(): Promise<void> {
+        const timeout = 10000; // 10 секунд для тайм-аута
+        let timeoutReached = false;
+
+        // Запускаем таймер
+        const timeoutId = setTimeout(() => {
+            timeoutReached = true;
+            console.log('Тайм-аут превышен');
+            // Здесь можно отправить уведомление
+            showAttention('Запрос подключения не был завершен вовремя', 'warning');
+            sendPushNotification('Ошибка подключения', 'Попробуйте подключиться снова.');
+        }, timeout);
+
         try {
-            await open();
+            // Выполнение попытки подключения
+            await open({
+                view: 'Connect', // Используем 'Connect' как пример для открытия страницы подключения
+            });
+
+            // Если подключение прошло успешно, отменяем тайм-аут
+            if (!timeoutReached) {
+                clearTimeout(timeoutId);
+                console.log('Подключение успешно');
+            }
         } catch (error) {
-            console.log('Error handle loginThunk', error);
+            if (timeoutReached) {
+                console.log('Запрос был отменен по тайм-ауту');
+            } else {
+                console.log('Ошибка при подключении: ', error);
+            }
+        } finally {
+            // Очистка таймера, если подключение было успешным или ошибка была обработана
+            clearTimeout(timeoutId);
+        }
+    }
+
+
+    function sendPushNotification(title: string, message: string) {
+        if ("Notification" in window && Notification.permission === "granted") {
+            new Notification(title, {
+                body: message,
+                icon: '/icon.png',
+            });
         }
     }
 
