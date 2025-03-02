@@ -28,7 +28,7 @@
 
 .header {
   font-family: globalIndex.$font_family_main;
-  background-color: #8ffba3;
+  background-color: globalIndex.$background_colour_main;
   width: mixins.rem(207);
   height: mixins.rem(56);
   color: #409798;
@@ -138,7 +138,7 @@
 
 
 .btn {
-  background-color: globalIndex.$btn_background;
+  background-color: globalIndex.$background_colour_main;
   color: globalIndex.$btn_color;
   border: none;
   cursor: pointer;

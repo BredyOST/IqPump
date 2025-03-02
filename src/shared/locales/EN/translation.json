@@ -27,7 +27,7 @@
     "check": "Safe",
     "connection":" connection check",
     "funding": "Deposit",
-    "balance": "Balance",
+    "balance": "Game balance",
     "withdraw": "Windrow",
     "withdraw_": "withdraw",
     "access": "Confirm",

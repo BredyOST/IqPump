@@ -262,8 +262,8 @@ const HaveAccount = observer(({
                         </div>
                     </div>
                     <div className={cls.th_info}>
-                        <div className={cls.user_name_tg}>{telegramUsername}</div>
-                        <div className={cls.adress}>{`${wallet?.slice(0, 10)}...${wallet?.slice(35)}`}</div>
+                    <div className={cls.user_name_tg}>{telegramUsername}</div>
+                        <div className={cls.adress}>{`****${wallet?.slice(35)}`}</div>
                     </div>
                 </div>
             </div>
@@ -312,7 +312,7 @@ const HaveAccount = observer(({
                     </div>
                     <div className={cls.cover_btn_send_cover}>
                         <CustomButton onClick={() => test(false)} classNameBtn={cls.btn_cancel} type='button'>
-                            {t('cancel')}
+                            {t('toIqPump')}
                         </CustomButton>
                     </div>
                 </div>

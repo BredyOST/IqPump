@@ -24,47 +24,6 @@
   box-sizing: border-box;
   overflow-y: scroll;
     background-color:  #2f164b;
-    //background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
-
-  //@media(min-height: mixins.em(2300)) {
-  //  background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
-  //}
-  //@media(max-height: mixins.em(2299)) {
-  //  background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 17%);
-  //}
-  //@media(max-height: mixins.em(1800)) {
-  //  background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
-  //}
-  //@media(max-height: mixins.em(1500)) {
-  //  background: radial-gradient(circle farthest-side at 50% 20%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
-  //}
-  //@media(max-height: mixins.em(1012)) {
-  //  background: radial-gradient(circle farthest-side at 50% 22%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 14%);
-  //}
-  //@media(max-height: mixins.em(962)) {
-  //  background: radial-gradient(circle farthest-side at 50% 22%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
-  //}
-  //@media(max-height: mixins.em(918)) {
-  //  background: radial-gradient(circle farthest-side at 50% 22%, #d21c72 0%, #bc188d 3%, #600f5f 11%, #2f164b 17%);
-  //}
-  //@media(max-height: mixins.em(890)) {
-  //  background: radial-gradient(circle farthest-side at 50% 25%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 17%);
-  //}
-  //@media(max-height: mixins.em(790)) {
-  //  background: radial-gradient(circle farthest-side at 50% 28%, #d21c72 0%, #bc188d 3%, #600f5f 16%, #2f164b 22%);
-  //}
-  //@media(max-height: mixins.em(700)) {
-  //  background: radial-gradient(circle farthest-side at 50% 28%, #d21c72 0%, #bc188d 3%, #600f5f 16%, #2f164b 22%);
-  //}
-  //@media(max-height: mixins.em(650)) {
-  //  background: radial-gradient(circle farthest-side at 50% 33%, #d21c72 0%, #bc188d 3%, #600f5f 19%, #2f164b 28%);
-  //}
-  //@media(max-height: mixins.em(585)) {
-  //  background: radial-gradient(circle farthest-side at 50% 37%, #d21c72 0%, #bc188d 3%, #600f5f 22%, #2f164b 28%);
-  //}
-  //@media(max-height: mixins.em(500)) {
-  //  background: radial-gradient(circle farthest-side at 50% 33%, #d21c72 0%, #bc188d 3%, #600f5f 13%, #2f164b 28%);
-  //}
 
   @media (min-width: mixins.em(global.$mobile)) {
     height: 98%;
@@ -108,7 +67,7 @@
 
 
 .btn_connect_login {
-  background-color: #39e476;
+  background-color: globalIndex.$background_colour_main;
   color: #2F164B;
   border: none;
   cursor: pointer;

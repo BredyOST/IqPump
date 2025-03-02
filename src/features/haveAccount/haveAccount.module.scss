@@ -57,79 +57,42 @@
 }
 
 
-
-.icon {
-    z-index: 1000;
-    object-fit: contain;
+.icon{
     position: absolute;
-    //position: absolute;
-    top: 0;
-    left: 50%;
-    width: 90%;
+    width: 70%;
     height: 90%;
-    transform: translate(-50%, 5%);
-
-    //width: mixins.rem(560);
-    //height: mixins.rem(730);
-    //transform: translate(-50%, mixins.rem(135));
-
-    //@include mixins.adaptiveHeight('height', 730, 390, 3, 2500, 1700);
-    //@include mixins.adaptiveHeight('height', 390, 340, 3, 1700, 1500);
-    //@include mixins.adaptiveHeight('height', 340, 220, 3, 1500, 1000);
-
-    //@media(min-height: mixins.em(2000)) {
-    //    transform: translate(-50%, mixins.rem(135));
-    //}
-    //
-    //@media(max-height: mixins.em(1999)) {
-    //    transform: translate(-50%, mixins.rem(135));
-    //}
-    //
-    //@media(max-height: mixins.em(1600)) {
-    //    transform: translate(-50%, mixins.rem(130));
-    //}
-    //
-    //@media(max-height: mixins.em(1464)) {
-    //    transform: translate(-50%, mixins.rem(122));
-    //}
-    //@media(max-height: mixins.em(1368)) {
-    //    transform: translate(-50%, mixins.rem(110));
-    //}
-    //@media(max-height: mixins.em(1280)) {
-    //    transform: translate(-50%, mixins.rem(110));
-    //}
-    //@media(max-height: mixins.em(1220)) {
-    //    transform: translate(-50%, mixins.rem(100));
-    //}
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scaleX(0.83) scaleY(0.96);
+    z-index: 2; // Убедись, что иконка выше фона
 }
 .background {
     position: absolute;
-    width: mixins.rem(1100);
-    height: mixins.rem(180);
-    background: radial-gradient(circle farthest-side at 50% 50%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
+    width: 180%;  // Увеличиваем, чтобы размытие не обрезалось
+    height: 180%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(210, 28, 114, 1) 13%, rgba(188, 24, 141, 0.4) 40%, rgba(47, 22, 75, 0) 90%);
     border-radius: 50%;
+    filter: blur(20px); // Размытие краёв
+    z-index: 0;
 }
 .wrapper {
     display: flex;
     flex-direction: column;
     padding-top: env(safe-area-inset-top, 0);
     justify-content: center;
-    row-gap: mixins.rem(20);
+    row-gap: mixins.rem(75);
     min-width: 100%;
     align-items: center;
 }
 
 .title_cover {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
     position: relative;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    color: #ffffff;
-    font-weight: 600;
-    text-align: center;
-    row-gap: mixins.rem(10);
-    border-radius: 50%;
     width: mixins.rem(180);
     height: mixins.rem(180);
 }
@@ -138,24 +101,41 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    row-gap: mixins.rem(30);
-    max-width: mixins.rem(490);
+    row-gap: mixins.rem(50);
+    max-width: 100%;
 
-    @media (min-width: mixins.em(361)) {
-        width: mixins.rem(321);
+
+
+    @media (min-width: mixins.em(481)) {
+        width: 90vw;
+        //max-width: 90vw;
+        max-width: mixins.rem(441);
     }
-    @media (max-width: mixins.em(360)) {
-        width: mixins.rem(280);
+    @media (max-width: mixins.em(480)) {
+        width: 90vw;
     }
+
+    @media (max-height: mixins.em(885)) {
+        //width: min(90vw, 50vh);
+    }
+
+    //@media (max-width: mixins.em(490)) and (max-height: mixins.em(885)) {
+    //    width: min(90vw, 50vh);
+    //}
+
+
+
 }
 
 .title {
     font-family: 'Luckiest Guy';
     font-weight: 700;
-    color: #91fca5;
+    color: globalIndex.$background_colour_main;
     font-size: mixins.rem(26);
     min-width: 100%;
     text-align: center;
+    position: relative;
+    z-index: 50;
 }
 
 .svg_brain {
@@ -170,6 +150,9 @@
     text-align: center;
     color: #ffffff;
     font-weight: 600;
+    line-height: globalIndex.$line_height;
+    position: relative;
+    z-index: 10;
 }
 
 .user_name_tg {
@@ -206,24 +189,39 @@
     font-family: 'Bebas Neue';
     font-size: mixins.rem(36);
     font-weight: 700;
-    color: #39e476;
+    color: globalIndex.$background_colour_main;
 }
 
 .btn_cash {
     background-color: #442d5d;
-    padding-bottom: mixins.rem(10);
-    padding-top: mixins.rem(10);
     transition:
         background-color ease 0.3s 0s,
         color ease 0.3s 0s;
-    min-width: mixins.rem(120);
     font-weight: 600;
 
     &.active {
-        background-color: #39e476;
+        background-color: #91FCA5;
         color: #2f164b;
     }
 
+    @media (min-width: mixins.em(401)) {
+        padding-bottom: mixins.rem(15);
+        padding-top: mixins.rem(15);
+        min-width: mixins.rem(150);
+    }
+
+    @media (max-width: mixins.em(400)) {
+        min-width: mixins.rem(130);
+        padding-bottom: mixins.rem(15);
+        padding-top: mixins.rem(15);
+    }
+
+    @media (max-width: mixins.em(400)) {
+        min-width: mixins.rem(120);
+        padding-bottom: mixins.rem(12);
+        padding-top: mixins.rem(12);
+    }
+    
     @media (any-hover: hover) {
         &:hover {
             //transition:
@@ -372,7 +370,7 @@
     background-color: #fff3;
 
     &.acess {
-        background-color: #39e476;
+        background-color: globalIndex.$background_colour_main;
         box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
         color: #2F164B;
         opacity: 1;
@@ -391,7 +389,7 @@
 }
 
 .btn_cancel {
-    color: #ffffff;
+    color: globalIndex.$background_colour_main;
     border: none;
     cursor: pointer;
     transition:
@@ -406,11 +404,11 @@
     font-weight: 700;
     border-radius: mixins.rem(40);
     min-width: mixins.rem(137);
-    background-color: #fff3;
+    //background-color: #fff3;
 
     @media (any-hover: hover) {
         &:hover {
-            background-color: rgba(220, 156, 133, 0.8);
+            //background-color: rgba(220, 156, 133, 0.8);
             transition:
                 background-color ease 0.3s,
                 box-shadow ease 0.3s;

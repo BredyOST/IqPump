@@ -39,40 +39,38 @@
 
 .background {
     position: absolute;
-    width: mixins.rem(1100);
-    height: mixins.rem(180);
-      background: radial-gradient(circle farthest-side at 50% 50%, #d21c72 0%, #bc188d 3%, #600f5f 10%, #2f164b 15%);
-    border-radius: 50%;
-}
-
-.icon {
-    z-index: 1000;
-    object-fit: contain;
-    position: absolute;
-    top: 0;
+    width: 180%;
+    height: 180%;
+    top: 50%;
     left: 50%;
-    width: 90%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(210, 28, 114, 1) 13%, rgba(188, 24, 141, 0.4) 40%, rgba(47, 22, 75, 0) 90%);
+    border-radius: 50%;
+    filter: blur(20px);
+    z-index: 0;
+}
+.icon{
+    position: absolute;
+    width: 70%;
     height: 90%;
-    transform: translate(-50%, 5%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scaleX(0.83) scaleY(0.96);
+    z-index: 2;
 }
 
 .cover_for_position {
     display: flex;
-     min-width: 100%;
+    min-width: 100%;
     justify-content: center;
 }
 
 .title_cover {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+
     position: relative;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    color: #ffffff;
-    font-weight: 600;
-    text-align: center;
-    row-gap: mixins.rem(10);
-    border-radius: 50%;
     width: mixins.rem(180);
     height: mixins.rem(180);
 }
@@ -80,8 +78,12 @@
 .title {
     font-family: 'Luckiest Guy';
     font-weight: 700;
-    color: #91fca5;
+    color: globalIndex.$background_colour_main;
     font-size: mixins.rem(26);
+    min-width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 50;
 }
 
 .svg_brain {
@@ -98,7 +100,7 @@
     align-items: center;
     text-align: center;
     border-radius: mixins.rem(15);
-    row-gap: mixins.rem(20);
+    row-gap: mixins.rem(45);
     padding-top: mixins.rem(10);
     padding-bottom: mixins.rem(20);
     padding-left: mixins.rem(10);
@@ -116,12 +118,12 @@
 
 .btn_send {
     font-family: globalIndex.$font_family_main;
+    background-color: globalIndex.$background_colour_main;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: #39e476;
-    color: #170a0a;
+    //color: #170a0a;
     border: none;
     cursor: pointer;
     box-shadow: mixins.rem(0) mixins.rem(0) mixins.rem(10) rgba(0, 0, 0, 0.2);
@@ -130,7 +132,7 @@
             box-shadow ease 0.3s;
     padding-left: mixins.rem(28);
     padding-right: mixins.rem(28);
-    min-height: mixins.rem(70);
+    height: mixins.rem(70);
     font-size: mixins.rem(16);
     font-weight: 700;
     border-radius: mixins.rem(40);
