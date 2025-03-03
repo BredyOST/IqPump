@@ -197,6 +197,8 @@
   column-gap: mixins.rem(40);
   justify-content: space-between;
   //max-width: mixins.rem(240);
+  position: relative;
+  z-index: 10000;
   @include mixins.adaptiveValue('column-gap', 40, 20, 3, 400, 320);
 
   @media (max-width: mixins.em(350)) {
